@@ -1,8 +1,7 @@
 const express = require("express");
-// const middleware = require("./config/");
-const routes = require("../routes/");
+const middleware = require("../config/");
 const app = express();
 
-app.use("/", routes(express.Router()));
+app.use(middleware(express));
 
 module.exports = app;
