@@ -1,6 +1,6 @@
 // import all routes here
 
-const auth = require("./registry");
+const auth = require("./auth");
 
 // root route for sanity check
 // list all users
