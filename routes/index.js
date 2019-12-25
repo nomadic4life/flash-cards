@@ -1,5 +1,7 @@
 // import all routes here
 
+const auth = require("./registry");
+
 // root route for sanity check
 // list all users
 // list all cards
@@ -27,10 +29,10 @@
 // track card status
 // users have a status table
 
-module.exports = router => {
+module.exports = (router, model) => {
+  const authRoutes = auth(model);
   // all routes are passed into router
-  router.get("/hello", (req, res) => {
-    res.send("hello world!!!");
-  });
+  router.post("/auth/login", authRoutes.login);
+  router.post("/auth/signup", authRoutes.signup);
   return router;
 };
