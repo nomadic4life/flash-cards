@@ -1,6 +1,7 @@
 // import all routes here
 
 const auth = require("./auth");
+const validAuth = require("../middleware");
 
 // root route for sanity check
 // list all users
@@ -32,7 +33,7 @@ const auth = require("./auth");
 module.exports = (router, model) => {
   const authRoutes = auth(model);
   // all routes are passed into router
-  router.post("/auth/login", authRoutes.login);
-  router.post("/auth/signup", authRoutes.signup);
+  router.post("/auth/login", validAuth, authRoutes.login);
+  router.post("/auth/signup", validAuth, authRoutes.signup);
   return router;
 };
