@@ -1,12 +1,9 @@
 const auth = model => {
   const login = async (req, res) => {
     const { username, password } = req.credentials;
-    try {
-      const message = await model.loginUser({ username, password });
-      res.status(200).json({ message });
-    } catch (err) {
-      res.status(401).json({ message: "Incorrect Credentials" });
-    }
+    const message = await model.loginUser({ username, password });
+    res.status(200).json({ message });
+    // res.status(401).json({ message: "Incorrect Credentials" });
   };
 
   const signup = async (req, res) => {
@@ -30,3 +27,10 @@ module.exports = auth;
 // check if username is valid type,
 // check if password is valid type
 // username in database, if user exit return username beging used. if username not exit create new user
+
+// login ::
+// check if user exist if user not exist respond with incorrect redentials
+// if user exist retrive password
+// hash req password compare to db password
+// if passwrod doesn't match respond with incorrect credentials
+// if password match generate and sign jwt respond 200 with token

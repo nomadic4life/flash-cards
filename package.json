@@ -12,7 +12,9 @@
     "bcrypt": "^3.0.7",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.6",
+    "pg": "^7.17.0"
   },
   "devDependencies": {
     "jest": "^24.9.0",

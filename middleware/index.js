@@ -25,4 +25,12 @@ const validAuth = async (req, res, next) => {
   next();
 };
 
-module.exports = validAuth;
+const checkUser = async (req, res, next) => {
+  const { username } = req.credentials;
+  const user = await findByUsername(username);
+};
+
+module.exports = {
+  validAuth,
+  checkUser
+};
