@@ -1,13 +1,21 @@
 // import all middleware here
-const routes = require("../routes/");
+const routes = require("../routes");
 
-module.exports = (express, model) => {
+module.exports = express => {
   const middleware = express();
+
   middleware.use(express.json());
-  // pass all middleware into middleware function
+
+  middleware.use("/api", routes(express.Router()));
+
   middleware.get("/", (req, res) => {
-    res.send("root route of api, sanity check. api up and running!");
+    res.status(200).json({ message: "API up and running!" });
   });
-  middleware.use("/api", routes(express.Router(), model));
+
+  middleware.use((error, req, res, next) => {
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || "internal server error" });
+  });
   return middleware;
 };
