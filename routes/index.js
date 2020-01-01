@@ -1,9 +1,6 @@
-// import all routes here
-
-const auth = require("./auth");
-const { validAuth } = require("../middleware");
-const wrapAsync = require("../utils/wapper_handler");
-const { userModel } = require("../models");
+const { login } = require("./auth");
+const { validAuth, authenticateUser, generateToken } = require("../middleware");
+const wrapAsync = require("../utils/wrapAsyncHandler");
 
 // root route for sanity check
 // list all users
@@ -32,24 +29,16 @@ const { userModel } = require("../models");
 // track card status
 // users have a status table
 
-module.exports = (router, model) => {
-  const authRoutes = auth(model);
+module.exports = router => {
   // all routes are passed into router
-  router.use("/auth", validAuth);
-  router.post("/auth/login", wrapAsync(authRoutes.login));
-  router.post("/auth/signup", authRoutes.signup);
+  router.use("/auth", wrapAsync(validAuth));
+  router.post(
+    "/auth/login",
+    wrapAsync(authenticateUser),
+    wrapAsync(generateToken),
+    wrapAsync(login)
+  );
+  // router.post("/auth/signup", authRoutes.signup);
 
-  router.post("/test", async (req, res) => {
-    const { username, password } = req.body;
-    console.log(username, password);
-    try {
-      const user = await userModel.findByUsername(username);
-      console.log(user, "user");
-      res.status(200).json({ message: user || "no user found" });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "server side error" });
-    }
-  });
   return router;
 };
