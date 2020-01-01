@@ -1,28 +1,24 @@
-const auth = model => {
-  const login = async (req, res) => {
-    const { username, password } = req.credentials;
-    const message = await model.loginUser({ username, password });
-    res.status(200).json({ message });
-    // res.status(401).json({ message: "Incorrect Credentials" });
-  };
+const { userModel } = require("../models");
 
-  const signup = async (req, res) => {
-    const { username, password } = req.credentials;
-    try {
-      const message = await model.signupUser({ username, password });
-      return res.status(201).json({ message });
-    } catch (err) {
-      res.status(err.status).json({ message: err.message });
-    }
-  };
-
-  return {
-    login,
-    signup
-  };
+const login = async (req, res) => {
+  // should probably send token over Auth headers
+  res.status(200).json({ message: req.token });
 };
 
-module.exports = auth;
+const signup = async (req, res) => {
+  const { username, password } = req.credentials;
+  try {
+    const message = await model.signupUser({ username, password });
+    return res.status(201).json({ message });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  login,
+  signup
+};
 
 // check if username is valid type,
 // check if password is valid type
