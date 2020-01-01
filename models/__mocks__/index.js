@@ -1,14 +1,3 @@
-// const stuff = require("../index")
-const model = jest.genMockFromModule("../index");
+const userModel = require("./user_models");
 
-function findByUsername(directoryPath) {
-  return {
-    id: 1,
-    username: "testuser",
-    password: "TestPass"
-  };
-}
-
-model.findByUsername = findByUsername;
-
-module.exports = module;
+module.exports = { userModel };
