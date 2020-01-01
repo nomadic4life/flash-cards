@@ -5,7 +5,7 @@ const saltRounds = 10;
 const secret = process.env.JWT_SECRET || "temp";
 const StatusError = require("../utils/errors");
 
-const validAuth = async (req, res, next) => {
+const isValidAuth = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -18,18 +18,20 @@ const validAuth = async (req, res, next) => {
     throw new StatusError("Basic Auth Type is required.", 401);
   }
 
-  const buff = new Buffer(data[1], "base64");
+  const buff = new Buffer.from(data[1], "base64");
   const text = buff.toString();
-  const username = text.split(":")[0];
-  const password = text.split(":")[1];
+  let username = text.split(":")[0];
+  let password = text.split(":")[1];
 
   if (!password || !username) {
     throw new StatusError("Missing Credentials.", 401);
   }
 
-  // sanatize username and password
-  // no spaces for username and password - trim
-  // lowercase for username
+  // sanatize username
+  username = username.trim().toLowerCase();
+
+  // sanatize password
+  password = password.trim();
 
   req.user = {
     username,
@@ -50,6 +52,70 @@ const authenticateUser = async (req, res, next) => {
   next();
 };
 
+const isValidUsername = async (req, res, next) => {
+  let { username } = req.user;
+
+  // validate username
+  // send error if
+  // username includes special chars
+  // username must contain latin chars,
+  // can have numbers
+  // must start with latin chars
+  // contain no spaces
+  // use regEx to validate
+
+  if (username.includes(" ")) {
+    throw new StatusError("Username must not contain spaces.", 422);
+  }
+
+  req.user.username = username;
+
+  next();
+};
+
+const isValidPassword = async (req, res, next) => {
+  let { password } = req.user;
+
+  // validate password
+  // password can contain
+  // latin letters
+  // numbers
+  // special characters
+  // no less than 6 letters
+  // lower case and capital letters
+  // no spaces
+  // use regEx to validate
+
+  if (password.includes(" ")) {
+    throw new StatusError("Password must not contain spaces.", 422);
+  }
+
+  if (password.length < 6) {
+    throw new StatusError("Password must have at least 6 characters.", 422);
+  }
+
+  req.user.password = bcrypt.hashSync(password, saltRounds);
+
+  next();
+};
+
+const ifUserExist = async (req, res, next) => {
+  const user = await userModel.findUser({ username: req.user.username });
+
+  if (!!user) {
+    throw new StatusError("Username already Taken.", 409);
+  }
+
+  next();
+};
+
+const createNewUser = async (req, res, next) => {
+  const { username, password } = req.user;
+  const user = await userModel.createUser({ username, password });
+  req.user = user;
+  next();
+};
+
 const generateToken = async (req, res, next) => {
   const { id, username } = req.user;
   const payload = {
@@ -62,13 +128,17 @@ const generateToken = async (req, res, next) => {
       // no test for this. need to figure out how to add tests for here
       return next(new StatusError("Server Error with Token", 500));
     }
-    req.token = token;
+    res.set("Authorization", "bearer " + token);
     next();
   });
 };
 
 module.exports = {
-  validAuth,
+  isValidAuth,
   authenticateUser,
-  generateToken
+  generateToken,
+  isValidUsername,
+  isValidPassword,
+  ifUserExist,
+  createNewUser
 };

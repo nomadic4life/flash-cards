@@ -1,5 +1,13 @@
-const { login } = require("./auth");
-const { validAuth, authenticateUser, generateToken } = require("../middleware");
+const { login, signup } = require("./auth");
+const {
+  isValidAuth,
+  authenticateUser,
+  generateToken,
+  isValidUsername,
+  isValidPassword,
+  ifUserExist,
+  createNewUser
+} = require("../middleware");
 const wrapAsync = require("../utils/wrapAsyncHandler");
 
 // root route for sanity check
@@ -31,14 +39,22 @@ const wrapAsync = require("../utils/wrapAsyncHandler");
 
 module.exports = router => {
   // all routes are passed into router
-  router.use("/auth", wrapAsync(validAuth));
+  router.use("/auth", wrapAsync(isValidAuth));
   router.post(
     "/auth/login",
     wrapAsync(authenticateUser),
     wrapAsync(generateToken),
     wrapAsync(login)
   );
-  // router.post("/auth/signup", authRoutes.signup);
+  router.post(
+    "/auth/signup",
+    wrapAsync(isValidUsername),
+    wrapAsync(ifUserExist),
+    wrapAsync(isValidPassword),
+    wrapAsync(createNewUser),
+    wrapAsync(generateToken),
+    wrapAsync(signup)
+  );
 
   return router;
 };

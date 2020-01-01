@@ -16,8 +16,21 @@ const findUser = ({ username }) => {
     : undefined;
 };
 
+const createUser = ({ username, password }) => {
+  if (username === "error") {
+    throw new StatusError("Server Error.", 500);
+  }
+
+  return {
+    id: 2,
+    username,
+    password
+  };
+};
+
 const userModel = {
-  findUser
+  findUser,
+  createUser
 };
 
 module.exports = userModel;

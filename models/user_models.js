@@ -8,8 +8,15 @@ const userDependencyDatabaseInjection = db => {
       .first("id", "username", "password");
   };
 
+  const createUser = ({ username, password }) => {
+    return db("user")
+      .insert({ username, password })
+      .findUser({ username });
+  };
+
   return {
-    findUser
+    findUser,
+    createUser
   };
 };
 

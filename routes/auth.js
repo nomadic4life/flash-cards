@@ -1,18 +1,11 @@
 const { userModel } = require("../models");
 
 const login = async (req, res) => {
-  // should probably send token over Auth headers
-  res.status(200).json({ message: req.token });
+  res.status(200).end();
 };
 
 const signup = async (req, res) => {
-  const { username, password } = req.credentials;
-  try {
-    const message = await model.signupUser({ username, password });
-    return res.status(201).json({ message });
-  } catch (err) {
-    res.status(err.status).json({ message: err.message });
-  }
+  res.status(201).end();
 };
 
 module.exports = {
@@ -30,3 +23,13 @@ module.exports = {
 // hash req password compare to db password
 // if passwrod doesn't match respond with incorrect credentials
 // if password match generate and sign jwt respond 200 with token
+
+// signup ::
+// validate auth
+// sanatize username and password
+// validate username and password, if validation fails return error and message
+// check if user exist, if exist return username already taken
+// otherwise ...
+// create new user
+// create token
+// send token to client
