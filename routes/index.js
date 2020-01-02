@@ -1,4 +1,5 @@
 const { login, signup } = require("./auth");
+const { users } = require("./users");
 const {
   isValidAuth,
   authenticateUser,
@@ -40,12 +41,14 @@ const wrapAsync = require("../utils/wrapAsyncHandler");
 module.exports = router => {
   // all routes are passed into router
   router.use("/auth", wrapAsync(isValidAuth));
+
   router.post(
     "/auth/login",
     wrapAsync(authenticateUser),
     wrapAsync(generateToken),
     wrapAsync(login)
   );
+
   router.post(
     "/auth/signup",
     wrapAsync(isValidUsername),
@@ -55,6 +58,8 @@ module.exports = router => {
     wrapAsync(generateToken),
     wrapAsync(signup)
   );
+
+  router.get("/users/all", wrapAsync(users));
 
   return router;
 };
