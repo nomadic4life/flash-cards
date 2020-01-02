@@ -1,28 +1,16 @@
-const { userModel } = require("../models");
-
-const login = async (req, res) => {
-  res.status(200).end();
-};
-
-const signup = async (req, res) => {
-  res.status(201).end();
-};
-
-module.exports = {
-  login,
-  signup
-};
-
-// check if username is valid type,
-// check if password is valid type
-// username in database, if user exit return username beging used. if username not exit create new user
+const wrapAsync = require("../utils/wrapAsyncHandler");
 
 // login ::
-// check if user exist if user not exist respond with incorrect redentials
-// if user exist retrive password
+// validate auth
+// sanatize username and password
+// check if user exist, if not exist return user not found
+// otherwise...
 // hash req password compare to db password
 // if passwrod doesn't match respond with incorrect credentials
 // if password match generate and sign jwt respond 200 with token
+const login = async (req, res) => {
+  res.status(200).end();
+};
 
 // signup ::
 // validate auth
@@ -33,3 +21,11 @@ module.exports = {
 // create new user
 // create token
 // send token to client
+const signup = async (req, res) => {
+  res.status(201).end();
+};
+
+module.exports = {
+  login: wrapAsync(login),
+  signup: wrapAsync(signup)
+};

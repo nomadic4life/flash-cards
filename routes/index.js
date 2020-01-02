@@ -9,7 +9,6 @@ const {
   ifUserExist,
   createNewUser
 } = require("../middleware");
-const wrapAsync = require("../utils/wrapAsyncHandler");
 
 // root route for sanity check
 // list all users
@@ -40,26 +39,23 @@ const wrapAsync = require("../utils/wrapAsyncHandler");
 
 module.exports = router => {
   // all routes are passed into router
-  router.use("/auth", wrapAsync(isValidAuth));
+  router.use("/auth", isValidAuth);
 
-  router.post(
-    "/auth/login",
-    wrapAsync(authenticateUser),
-    wrapAsync(generateToken),
-    wrapAsync(login)
-  );
+  router.post("/auth/login", [authenticateUser, generateToken], login);
 
   router.post(
     "/auth/signup",
-    wrapAsync(isValidUsername),
-    wrapAsync(ifUserExist),
-    wrapAsync(isValidPassword),
-    wrapAsync(createNewUser),
-    wrapAsync(generateToken),
-    wrapAsync(signup)
+    [
+      isValidUsername,
+      ifUserExist,
+      isValidPassword,
+      createNewUser,
+      generateToken
+    ],
+    signup
   );
 
-  router.get("/users/all", wrapAsync(users));
+  router.get("/users/all", users);
 
   return router;
 };

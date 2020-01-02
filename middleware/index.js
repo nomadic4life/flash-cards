@@ -1,4 +1,5 @@
 const { userModel } = require("../models");
+const wrapAsync = require("../utils/wrapAsyncHandler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -134,11 +135,11 @@ const generateToken = async (req, res, next) => {
 };
 
 module.exports = {
-  isValidAuth,
-  authenticateUser,
-  generateToken,
-  isValidUsername,
-  isValidPassword,
-  ifUserExist,
-  createNewUser
+  isValidAuth: wrapAsync(isValidAuth),
+  authenticateUser: wrapAsync(authenticateUser),
+  generateToken: wrapAsync(generateToken),
+  isValidUsername: wrapAsync(isValidUsername),
+  isValidPassword: wrapAsync(isValidPassword),
+  ifUserExist: wrapAsync(ifUserExist),
+  createNewUser: wrapAsync(createNewUser)
 };
