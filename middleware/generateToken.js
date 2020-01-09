@@ -15,6 +15,7 @@ const generateToken = async (req, res, next) => {
       return next(new StatusError("Server Error with Token", 500));
     }
     res.set("Authorization", "bearer " + token);
+
     next();
   });
 };

@@ -6,13 +6,13 @@ const isAuthenticated = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
-    throw new StatusError("Token is required.", 401);
+    return next(new StatusError("Token is required.", 401));
   }
 
   const token = authorization.split(" ");
 
   if (token[0].toLowerCase() !== "bearer") {
-    throw new StatusError("Bearer Auth Type is required.", 401);
+    return next(new StatusError("Bearer Auth Type is required.", 401));
   }
 
   jwt.verify(token[1], secret, (err, decoded) => {

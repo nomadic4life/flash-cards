@@ -1,32 +1,54 @@
-const request = require("supertest");
-const server = require("../api-server");
+const authenticateUser = require("./authenticateUser");
 
 jest.mock("../models");
 
-describe("  03 - Should return 401 HTTP status code for", () => {
-  it("03.6 Username not found.", () => {
-    const username = "wrongusername",
-      password = "TestPass";
-    return request(server)
-      .post("/api/auth/login")
-      .auth(username, password)
-      .then(response => {
-        const { message } = response.body;
-        expect(message).toBe("Invalid Credentials.");
-        expect(response.status).toBe(401);
-      });
+describe("authenticateUser middleware", () => {
+  it("Should call next() if correct credentials.", () => {
+    const req = {
+      user: {
+        username: "testuser",
+        password: "TestPass"
+      }
+    };
+    const res = {};
+    return authenticateUser(req, res, () => {
+      const { id, username } = req.user;
+      expect(id).toBe(0);
+      expect(username).toBe("testuser");
+    });
   });
 
-  it("03.7 Incorrect password.", () => {
-    const username = "testuser",
-      password = "password";
-    return request(server)
-      .post("/api/auth/login")
-      .auth(username, password)
-      .then(response => {
-        const { message } = response.body;
-        expect(message).toBe("Invalid Credentials.");
-        expect(response.status).toBe(401);
-      });
+  it("Should call next(error) if incorrect password.", () => {
+    const req = {
+      user: {
+        username: "testuser",
+        password: "WrongPass"
+      }
+    };
+
+    const res = {};
+
+    return authenticateUser(req, res, error => {
+      const { status, statusMessage } = error;
+      expect(statusMessage).toBe("Invalid Credentials.");
+      expect(status).toBe(401);
+    });
+  });
+
+  it("should call next(error) if non-existent user.", () => {
+    const req = {
+      user: {
+        username: "wronguser",
+        password: "TestPass"
+      }
+    };
+
+    const res = {};
+
+    return authenticateUser(req, res, error => {
+      const { status, statusMessage } = error;
+      expect(statusMessage).toBe("Invalid Credentials.");
+      expect(status).toBe(401);
+    });
   });
 });

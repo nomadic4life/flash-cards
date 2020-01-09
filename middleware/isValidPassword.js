@@ -16,11 +16,13 @@ const isValidPassword = async (req, res, next) => {
   // use regEx to validate
 
   if (password.includes(" ")) {
-    throw new StatusError("Password must not contain spaces.", 422);
+    return next(new StatusError("Password must not contain spaces.", 422));
   }
 
   if (password.length < 6) {
-    throw new StatusError("Password must have at least 6 characters.", 422);
+    return next(
+      new StatusError("Password must have at least 6 characters.", 422)
+    );
   }
 
   req.user.password = bcrypt.hashSync(password, saltRounds);

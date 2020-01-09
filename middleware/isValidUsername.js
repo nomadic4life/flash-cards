@@ -2,7 +2,6 @@ const StatusError = require("../utils/errors");
 
 const isValidUsername = async (req, res, next) => {
   let { username } = req.user;
-
   // validate username
   // send error if
   // username includes special chars
@@ -13,7 +12,7 @@ const isValidUsername = async (req, res, next) => {
   // use regEx to validate
 
   if (username.includes(" ")) {
-    throw new StatusError("Username must not contain spaces.", 422);
+    return next(new StatusError("Username must not contain spaces.", 422));
   }
 
   req.user.username = username;

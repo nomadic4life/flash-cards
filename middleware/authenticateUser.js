@@ -7,7 +7,8 @@ const authenticateUser = async (req, res, next) => {
   const user = await userModel.findUser({ username });
 
   if (!user || !bcrypt.compareSync(password, user.password)) {
-    throw new StatusError("Invalid Credentials.", 401);
+    // throw new StatusError("Invalid Credentials.", 401);
+    return next(new StatusError("Invalid Credentials.", 401));
   }
   req.user = user;
   next();

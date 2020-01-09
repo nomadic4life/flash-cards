@@ -1,8 +1,8 @@
-const request = require("supertest");
-const server = require("../api-server");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET || "temp";
 const dummyData = require("../data/mockData");
+const isAuthenticated = require("./isAuthenticated");
+const StatusError = require("../utils/errors");
 
 describe("/api/list-all, testing auth ,Should return 401 for", () => {
   const user = {
@@ -15,38 +15,73 @@ describe("/api/list-all, testing auth ,Should return 401 for", () => {
     id: user.id,
     username: user.username
   };
-  it("No Auth token.", () => {
-    return request(server)
-      .get("/api/list-all")
-      .then(response => {
-        const { data, message } = response.body;
-        expect(data).toBe(undefined);
-        expect(message).toBe("Token is required.");
-        expect(response.status).toBe(401);
-      });
+
+  it("should call next(error) if no auth token givin.", () => {
+    const req = {
+      headers: {}
+    };
+
+    const res = {};
+
+    return isAuthenticated(req, res, error => {
+      expect(error).toBeInstanceOf(StatusError);
+      expect(error.status).toBe(401);
+      expect(error.statusMessage).toBe("Token is required.");
+    });
   });
 
-  it("Incorrect Auth type.", () => {
-    return request(server)
-      .get("/api/list-all")
-      .set("authorization", `basic ${jwt.sign(payload, secret)}`)
-      .then(response => {
-        const { data, message } = response.body;
-        expect(data).toBe(undefined);
-        expect(message).toBe("Bearer Auth Type is required.");
-        expect(response.status).toBe(401);
-      });
+  it("should call next(error) if not bearer auth type.", () => {
+    const req = {
+      headers: {
+        authorization: "basic"
+      }
+    };
+
+    const res = {};
+
+    return isAuthenticated(req, res, error => {
+      expect(error).toBeInstanceOf(StatusError);
+      expect(error.status).toBe(401);
+      expect(error.statusMessage).toBe("Bearer Auth Type is required.");
+    });
   });
 
-  it("Incorrect token.", () => {
-    return request(server)
-      .get("/api/list-all")
-      .set("authorization", `Bearer ${jwt.sign(payload, "secret")}`)
-      .then(response => {
-        const { data, message } = response.body;
-        expect(data).toBe(undefined);
-        expect(message).toBe("Invalid token.");
-        expect(response.status).toBe(401);
+  it("should call next(error) if invalid token.", () => {
+    const req = {
+      headers: {
+        authorization: "bearer wrongToken"
+      }
+    };
+
+    const res = {};
+
+    return isAuthenticated(req, res, error => {
+      expect(error).toBeInstanceOf(StatusError);
+      expect(error.status).toBe(401);
+      expect(error.statusMessage).toBe("Invalid token.");
+    });
+  });
+
+  it("should call next(), auth header set with jwt token", async () => {
+    const token = jwt.sign(payload, secret);
+    const req = {
+      headers: {
+        authorization: "bearer " + token
+      }
+    };
+
+    const res = {};
+
+    return new Promise(resolve => {
+      isAuthenticated(req, res, err => {
+        if (!err) {
+          resolve(req);
+        }
       });
+    }).then(result => {
+      expect(result).toHaveProperty("user");
+      expect(result.user).toHaveProperty("id", user.id);
+      expect(result.user).toHaveProperty("username", user.username);
+    });
   });
 });

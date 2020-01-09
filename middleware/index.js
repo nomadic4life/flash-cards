@@ -10,15 +10,22 @@ const listResource = require("./listResource");
 
 const wrapAsync = require("../utils/wrapAsyncHandler");
 
-module.exports = {
-  isValidAuth: wrapAsync(isValidAuth),
-  authenticateUser: wrapAsync(authenticateUser),
-  generateToken: wrapAsync(generateToken),
-  isValidUsername: wrapAsync(isValidUsername),
-  isValidPassword: wrapAsync(isValidPassword),
-  ifUserExist: wrapAsync(ifUserExist),
-  createNewUser: wrapAsync(createNewUser),
-  isAuthenticated: wrapAsync(isAuthenticated),
-  listUsers: wrapAsync(listUsers),
-  listResource: wrapAsync(listResource)
+const augmentAsync = middleware => {
+  const wrappedMiddleware = {};
+  for (let mod in middleware) {
+    wrappedMiddleware[mod] = wrapAsync(middleware[mod]);
+  }
+  return wrappedMiddleware;
 };
+
+module.exports = augmentAsync({
+  isValidAuth,
+  authenticateUser,
+  generateToken,
+  isValidUsername,
+  isValidPassword,
+  ifUserExist,
+  createNewUser,
+  isAuthenticated,
+  listResource
+});
