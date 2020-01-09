@@ -12,7 +12,7 @@ const isValidUsername = async (req, res, next) => {
   // use regEx to validate
 
   if (username.includes(" ")) {
-    return next(new StatusError("Username must not contain spaces.", 422));
+    return next(new StatusError("Username must not contain spaces.", 400));
   }
 
   req.user.username = username;

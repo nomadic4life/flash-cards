@@ -16,12 +16,12 @@ const isValidPassword = async (req, res, next) => {
   // use regEx to validate
 
   if (password.includes(" ")) {
-    return next(new StatusError("Password must not contain spaces.", 422));
+    return next(new StatusError("Password must not contain spaces.", 400));
   }
 
   if (password.length < 6) {
     return next(
-      new StatusError("Password must have at least 6 characters.", 422)
+      new StatusError("Password must have at least 6 characters.", 400)
     );
   }
 

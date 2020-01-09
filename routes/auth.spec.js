@@ -2,12 +2,13 @@ const request = require("supertest");
 const server = require("../api-server");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET || "temp";
+const dummyData = require("../data/mockData");
 
 jest.mock("../models");
 
 describe("\nPOST /api/auth/login", () => {
   it("01 - Should return 200 http status code with Token.", async () => {
-    const username = "testuser",
+    const username = dummyData.users[0].username,
       password = "TestPass";
     const response = await request(server)
       .post("/api/auth/login")
@@ -16,8 +17,8 @@ describe("\nPOST /api/auth/login", () => {
     const { authorization } = response.header;
 
     const payload = {
-      id: 1,
-      username
+      id: dummyData.users[0].id,
+      username: dummyData.users[0].username
     };
 
     expect(authorization.split(" ")[1]).toBe(jwt.sign(payload, secret));
@@ -130,7 +131,7 @@ describe("\nPOST /api/auth/login", () => {
 
 describe("\nPOST /api/auth/signup", () => {
   it("should return 201 http status code with Token.", () => {
-    const username = "testuser2",
+    const username = "newtestuser",
       password = "TestPass";
     return request(server)
       .post("/api/auth/signup")
@@ -138,7 +139,7 @@ describe("\nPOST /api/auth/signup", () => {
       .then(response => {
         const { authorization } = response.header;
         const payload = {
-          id: 2,
+          id: dummyData.users.length,
           username
         };
         expect(authorization.split(" ")[1]).toBe(jwt.sign(payload, secret));
@@ -160,7 +161,7 @@ describe("\nPOST /api/auth/signup", () => {
   describe("  03 - Should return 401 HTTP status code for", () => {
     it("03.1 Empty Authorization in header.", () => {
       return request(server)
-        .post("/api/auth/login")
+        .post("/api/auth/signup")
         .then(response => {
           const { message } = response.body;
           expect(message).toBe("Username and Password required.");
@@ -172,7 +173,7 @@ describe("\nPOST /api/auth/signup", () => {
       const username = "username",
         password = "password";
       return request(server)
-        .post("/api/auth/login")
+        .post("/api/auth/signup")
         .auth(username, password, { type: "bearer" })
         .then(response => {
           const { message } = response.body;
@@ -185,7 +186,7 @@ describe("\nPOST /api/auth/signup", () => {
       const username = "username",
         password = "";
       return request(server)
-        .post("/api/auth/login")
+        .post("/api/auth/signup")
         .auth(username, password)
         .then(response => {
           const { message } = response.body;
@@ -198,7 +199,7 @@ describe("\nPOST /api/auth/signup", () => {
       const username = "",
         password = "password";
       return request(server)
-        .post("/api/auth/login")
+        .post("/api/auth/signup")
         .auth(username, password)
         .then(response => {
           const { message } = response.body;
@@ -211,7 +212,7 @@ describe("\nPOST /api/auth/signup", () => {
       const username = "",
         password = "";
       return request(server)
-        .post("/api/auth/login")
+        .post("/api/auth/signup")
         .auth(username, password)
         .then(response => {
           const { message } = response.body;
@@ -243,7 +244,7 @@ describe("\nPOST /api/auth/signup", () => {
       .then(response => {
         const { message } = response.body;
         expect(message).toBe("Username must not contain spaces.");
-        expect(response.status).toBe(422);
+        expect(response.status).toBe(400);
       });
   });
 
@@ -256,7 +257,7 @@ describe("\nPOST /api/auth/signup", () => {
       .then(response => {
         const { message } = response.body;
         expect(message).toBe("Password must not contain spaces.");
-        expect(response.status).toBe(422);
+        expect(response.status).toBe(400);
       });
   });
 
@@ -269,7 +270,7 @@ describe("\nPOST /api/auth/signup", () => {
       .then(response => {
         const { message } = response.body;
         expect(message).toBe("Password must have at least 6 characters.");
-        expect(response.status).toBe(422);
+        expect(response.status).toBe(400);
       });
   });
 });

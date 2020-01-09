@@ -14,7 +14,7 @@ describe("isValidUsername middleware", () => {
 
     return isValidUsername(req, res, error => {
       expect(error).toBeInstanceOf(StatusError);
-      expect(error.status).toBe(422);
+      expect(error.status).toBe(400);
       expect(error.statusMessage).toBe("Username must not contain spaces.");
     });
   });

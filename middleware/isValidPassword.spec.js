@@ -27,7 +27,7 @@ describe("isValidPassword middleware", () => {
     const res = {};
 
     return isValidPassword(req, res, error => {
-      expect(error.status).toBe(422);
+      expect(error.status).toBe(400);
       expect(error.statusMessage).toBe("Password must not contain spaces.");
     });
   });
@@ -41,7 +41,7 @@ describe("isValidPassword middleware", () => {
     const res = {};
 
     return isValidPassword(req, res, error => {
-      expect(error.status).toBe(422);
+      expect(error.status).toBe(400);
       expect(error.statusMessage).toBe(
         "Password must have at least 6 characters."
       );
