@@ -1,8 +1,10 @@
 // global middleware and controller configuration
 const routes = require("../routes");
+const port = process.env.SERVER_PORT;
 
 module.exports = express => {
   const app = express();
+  app.locals.port = port;
 
   app.use(express.json());
 
