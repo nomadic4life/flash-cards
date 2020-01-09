@@ -1,21 +1,22 @@
-// import all middleware here
+// global middleware and controller configuration
 const routes = require("../routes");
 
 module.exports = express => {
-  const middleware = express();
+  const app = express();
 
-  middleware.use(express.json());
+  app.use(express.json());
 
-  middleware.use("/api", routes(express.Router()));
+  app.use("/api", routes(express.Router()));
 
-  middleware.get("/", (req, res) => {
+  app.get("/", (req, res) => {
     res.status(200).json({ message: "API up and running!" });
   });
 
-  middleware.use((error, req, res, next) => {
+  app.use((error, req, res, next) => {
     res
       .status(error.status || 500)
       .json({ message: error.message || "internal server error" });
   });
-  return middleware;
+
+  return app;
 };
