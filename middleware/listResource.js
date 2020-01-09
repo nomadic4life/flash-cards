@@ -16,7 +16,7 @@ const listResource = async (req, res, next) => {
 
   const data = resourceModel.fetchAll({ page, perPage });
 
-  req.data = { [resource]: data, page };
+  req.data = { [resource]: data || {}, page };
 
   next();
 };

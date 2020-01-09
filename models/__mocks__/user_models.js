@@ -1,19 +1,20 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const StatusError = require("../../utils/errors");
+const dummyData = require("../../data/mockData");
+
+const error = () => {
+  if (username === "error") {
+    throw new StatusError("Server Error.", 500);
+  }
+};
 
 const findUser = ({ username }) => {
   if (username === "error") {
     throw new StatusError("Server Error.", 500);
   }
 
-  return username === "testuser"
-    ? {
-        id: 1,
-        username: "testuser",
-        password: bcrypt.hashSync("TestPass", saltRounds)
-      }
-    : undefined;
+  return username === "testuser" ? dummyData.users[0] : undefined;
 };
 
 const createUser = ({ username, password }) => {
@@ -22,25 +23,26 @@ const createUser = ({ username, password }) => {
   }
 
   return {
-    id: 2,
+    id: dummyData.users.length,
     username,
     password
   };
 };
 
+const fetchAll = ({ page, perPage }) => {
+  if (page === "error") {
+    throw new StatusError("Server Error.", 500);
+  }
+
+  return dummyData.users
+    .filter((user, index) => index < page * perPage + perPage)
+    .map(user => ({ id: user.id, username: user.username }));
+};
+
 const userModel = {
   findUser,
-  createUser
+  createUser,
+  fetchAll
 };
 
 module.exports = userModel;
-
-// user = {
-//   id: 0,
-//   username: "testuser",
-//   password: "TestPassword"
-// }
-
-// user = {}
-
-// user = new Error()

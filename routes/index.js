@@ -1,14 +1,6 @@
-const { login, signup } = require("./auth");
-const { users } = require("./users");
-const {
-  isValidAuth,
-  authenticateUser,
-  generateToken,
-  isValidUsername,
-  isValidPassword,
-  ifUserExist,
-  createNewUser
-} = require("../middleware");
+const authenticationRoutes = require("./authenticationRoutes");
+const generalRoutes = require("./generalRoutes");
+const { isAuthenticated } = require("../middleware");
 
 // root route for sanity check
 // list all users
@@ -39,23 +31,13 @@ const {
 
 module.exports = router => {
   // all routes are passed into router
-  router.use("/auth", isValidAuth);
+  authenticationRoutes(router);
 
-  router.post("/auth/login", [authenticateUser, generateToken], login);
+  router.use(isAuthenticated);
+  generalRoutes(router);
 
-  router.post(
-    "/auth/signup",
-    [
-      isValidUsername,
-      ifUserExist,
-      isValidPassword,
-      createNewUser,
-      generateToken
-    ],
-    signup
-  );
-
-  router.get("/users/all", users);
+  // router.get("/users/all", isAuthenticated, listUsers);
+  // router.get("/users/:any", users);
 
   return router;
 };
