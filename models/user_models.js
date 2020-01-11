@@ -14,9 +14,19 @@ const userDependencyDatabaseInjection = db => {
       .findUser({ username });
   };
 
+  const allUsers = () => {
+    return db("user");
+    // return db
+    //   .from("deck")
+    //   .innerJoin("user", "user.id", "deck.user_id")
+    //   .select("deck.id", "user_id", "username", "user.created_at as created");
+    // .leftJoin("user");
+  };
+
   return {
     findUser,
-    createUser
+    createUser,
+    allUsers
   };
 };
 
