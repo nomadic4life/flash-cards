@@ -1,0 +1,29 @@
+{
+  "name": "flash-cards",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nomadic4life/flash-cards.git",
+  "author": "nomadic4life <orbison.dennis@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.6",
+    "pg": "^7.17.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
