@@ -71,3 +71,322 @@ Routes
 // track deck status
 // track card status
 // users have a status table
+
+# **API Schema:**
+
+### logged in user deck list
+
+list of all cards grouped by deck collection
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "total_decks": 1,
+  "total_cards": 1,
+  "user_decks": [
+    {
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_title": "forgot",
+      "user_deck_cards_list": [
+        {
+          "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "foreign_word": "여보세요",
+          "translation": "hello",
+          "definition": "greetings",
+          "image": "null",
+          "audio": "null",
+          "animation": "null",
+          "failed_attempts": 0,
+          "successful_attempts": 0,
+          "review_date": "datestring"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### logged in user card list
+
+list of all cards, grouped by card collection
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "total_decks": 1,
+  "total_cards": 1,
+  "deck_id_list": [{ "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18" }],
+  "user_cards_list": [
+    {
+      "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_title": "forgot",
+      "foreign_word": "여보세요",
+      "translation": "hello",
+      "definition": "greetings",
+      "image": "null",
+      "audio": "null",
+      "animation": "null",
+      "failed_attempts": 0,
+      "successful_attempts": 0,
+      "review_date": "datestring"
+    }
+  ]
+}
+```
+
+### logged in user deck
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "deck": {
+    "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+    "deck_title": "forgot",
+    "deck_total_cards": 1,
+    "user_deck_cards_list": [
+      {
+        "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+        "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+        "foreign_word": "여보세요",
+        "translation": "hello",
+        "definition": "greetings",
+        "image": "null",
+        "audio": "null",
+        "animation": "null",
+        "failed_attempts": 0,
+        "successful_attempts": 0,
+        "review_date": "datestring"
+      }
+    ]
+  }
+}
+```
+
+### logged in user card
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "card": {
+    "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+    "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+    "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+    "deck_title": "forgot",
+    "foreign_word": "여보세요",
+    "translation": "hello",
+    "definition": "greetings",
+    "image": "null",
+    "audio": "null",
+    "animation": "null",
+    "failed_attempts": 0,
+    "successful_attempts": 0,
+    "review_date": "datestring"
+  }
+}
+```
+
+### deck list / decks paginated results
+
+```json
+{
+  "decks": [
+    {
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "username": "testuser",
+      "deck_title": "forgot",
+      "deck_card_total": 1,
+      "deck_card_list": [
+        {
+          "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "foreign_word": "여보세요",
+          "translation": "hello",
+          "definition": "greetings",
+          "image": "null",
+          "audio": "null",
+          "animation": "null"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### card list / cards paginated results
+
+```json
+{
+  "cards": [
+    {
+      "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "created_by": "username",
+      "foreign_word": "여보세요",
+      "translation": "hello",
+      "definition": "greetings",
+      "image": "null",
+      "audio": "null",
+      "animation": "null",
+      "decks_total": 1,
+      "listed_card_decks": [
+        {
+          "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "username": "testuser",
+          "deck_title": "forgot"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### user card list
+
+list of all cards of a user, grouped by card list
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "deck_list": [{ "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18" }],
+  "total_cards": 1,
+  "total_decks": 1,
+  "user_card_list": [
+    {
+      "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_title": "forgot",
+      "foreign_word": "여보세요",
+      "translation": "hello",
+      "definition": "greetings",
+      "image": "null",
+      "audio": "null",
+      "animation": "null"
+    }
+  ]
+}
+```
+
+### user deck list
+
+list of all decks of a user, grouped by deck list
+
+```json
+{
+  "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+  "username": "testuser",
+  "total_cards": 1,
+  "total_decks": 1,
+  "deck_list": [
+    {
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "deck_title": "forgot",
+      "deck_cards_total": 1,
+      "deck_card_list": [
+        {
+          "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "created_by": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "foreign_word": "여보세요",
+          "translation": "hello",
+          "definition": "greetings",
+          "image": "null",
+          "audio": "null",
+          "animation": "null"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### user list / users paginated results
+
+list of paginated users,
+with all cards grouped by card collection
+
+```json
+{
+  "users": [
+    {
+      "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "username": "testuser",
+      "total_decks": 0,
+      "total_cards": 0,
+      "deck_list": [{ "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18" }],
+      "card_list": [
+        {
+          "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "deck_title": "forgot",
+          "foreign_word": "여보세요",
+          "translation": "hello",
+          "definition": "greetings",
+          "image": "null",
+          "audio": "null",
+          "animation": "null"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### user list / users paginated results
+
+list of paginated users,
+with all cards grouped by decks
+
+```json
+{
+  "users": [
+    {
+      "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "username": "testuser",
+      "total_decks": 1,
+      "total_cards": 1,
+      "deck_list": [
+        {
+          "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "deck_title": "forgot",
+          "deck_cards_total": 1,
+          "deck_card_list": [
+            {
+              "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+              "created_by": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+              "foreign_word": "여보세요",
+              "translation": "hello",
+              "definition": "greetings",
+              "image": "null",
+              "audio": "null",
+              "animation": "null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### user list / users paginated results
+
+list of paginated users,
+no cards and decks
+
+```json
+{
+  "users": [
+    {
+      "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "username": "testuser"
+    }
+  ]
+}
+```
