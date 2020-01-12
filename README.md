@@ -74,9 +74,16 @@ Routes
 
 # **API Schema:**
 
-### logged in user deck list
+## _Signed-in User data:_
 
-list of all cards grouped by deck collection
+| Method | Status | Endpoint           |
+| :----: | -----: | :----------------- |
+|  GET   |    200 | `/api/:user`       |
+|  POST  |    200 | `/api/auth/login`  |
+|  POST  |    201 | `/api/auth/signup` |
+
+    list of all cards grouped by deck collection.
+    # Response:
 
 ```json
 {
@@ -88,6 +95,8 @@ list of all cards grouped by deck collection
     {
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_title": "forgot",
+      "description": "Basic Korean words.",
+      "category": "language",
       "user_deck_cards_list": [
         {
           "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
@@ -108,9 +117,8 @@ list of all cards grouped by deck collection
 }
 ```
 
-### logged in user card list
-
-list of all cards, grouped by card collection
+    list of all cards, grouped by user card collection.
+    # Response:
 
 ```json
 {
@@ -125,6 +133,8 @@ list of all cards, grouped by card collection
       "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_title": "forgot",
+      "description": "Basic Korean words.",
+      "category": "language",
       "foreign_word": "여보세요",
       "translation": "hello",
       "definition": "greetings",
@@ -139,7 +149,13 @@ list of all cards, grouped by card collection
 }
 ```
 
-### logged in user deck
+## _Signed-in User deck:_
+
+| Method | Status | Endpoint                                                  |
+| :----: | -----: | :-------------------------------------------------------- |
+|  GET   |    200 | `/api/:user?deck_id=d091bdcd-2c08-4e5e-852c-289b75ba6f18` |
+
+    # Response:
 
 ```json
 {
@@ -148,6 +164,8 @@ list of all cards, grouped by card collection
   "deck": {
     "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
     "deck_title": "forgot",
+    "description": "Basic Korean words.",
+    "category": "language",
     "deck_total_cards": 1,
     "user_deck_cards_list": [
       {
@@ -168,7 +186,13 @@ list of all cards, grouped by card collection
 }
 ```
 
-### logged in user card
+## _Signed-in User card:_
+
+| Method | Status | Endpoint                                                       |
+| :----: | -----: | :------------------------------------------------------------- |
+|  GET   |    200 | `/api/:user?user_card_id=c091bdcd-2c08-4e5e-852c-289b75ba6f18` |
+
+    # Response:
 
 ```json
 {
@@ -179,6 +203,8 @@ list of all cards, grouped by card collection
     "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
     "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
     "deck_title": "forgot",
+    "description": "Basic Korean words.",
+    "category": "language",
     "foreign_word": "여보세요",
     "translation": "hello",
     "definition": "greetings",
@@ -192,7 +218,14 @@ list of all cards, grouped by card collection
 }
 ```
 
-### deck list / decks paginated results
+## _Deck list / decks paginated results_
+
+| Method | Status | Endpoint                       |
+| :----: | -----: | :----------------------------- |
+|  GET   |    200 | `/api/list-all?resource=decks` |
+
+    # results list of decks are paginated.
+    # Response:
 
 ```json
 {
@@ -202,10 +235,12 @@ list of all cards, grouped by card collection
       "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "username": "testuser",
       "deck_title": "forgot",
+      "description": "Basic Korean words.",
       "deck_card_total": 1,
       "deck_card_list": [
         {
           "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "category": "language",
           "foreign_word": "여보세요",
           "translation": "hello",
           "definition": "greetings",
@@ -219,7 +254,14 @@ list of all cards, grouped by card collection
 }
 ```
 
-### card list / cards paginated results
+## _Card list / cards paginated results_
+
+| Method | Status | Endpoint                       |
+| :----: | -----: | :----------------------------- |
+|  GET   |    200 | `/api/list-all?resource=cards` |
+
+    # results list of cards are paginated.
+    # Response:
 
 ```json
 {
@@ -239,7 +281,9 @@ list of all cards, grouped by card collection
           "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "username": "testuser",
-          "deck_title": "forgot"
+          "deck_title": "forgot",
+          "description": "Basic Korean words.",
+          "category": "language"
         }
       ]
     }
@@ -247,9 +291,14 @@ list of all cards, grouped by card collection
 }
 ```
 
-### user card list
+## _User card list_
 
-list of all cards of a user, grouped by card list
+| Method | Status | Endpoint                                                       |
+| :----: | -----: | :------------------------------------------------------------- |
+|  GET   |    200 | `/api/user/cards?user_id=u091bdcd-2c08-4e5e-852c-289b75ba6f18` |
+
+    # results list of all cards of a user, grouped by card list.
+    # Response:
 
 ```json
 {
@@ -263,6 +312,8 @@ list of all cards of a user, grouped by card list
       "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_title": "forgot",
+      "description": "Basic Korean words.",
+      "category": "language",
       "foreign_word": "여보세요",
       "translation": "hello",
       "definition": "greetings",
@@ -274,9 +325,14 @@ list of all cards of a user, grouped by card list
 }
 ```
 
-### user deck list
+## _User deck list_
 
-list of all decks of a user, grouped by deck list
+| Method | Status | Endpoint                                                       |
+| :----: | -----: | :------------------------------------------------------------- |
+|  GET   |    200 | `/api/user/decks?user_id=u091bdcd-2c08-4e5e-852c-289b75ba6f18` |
+
+    # results list of all cards of a user, grouped by deck list.
+    # Response:
 
 ```json
 {
@@ -288,6 +344,8 @@ list of all decks of a user, grouped by deck list
     {
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "deck_title": "forgot",
+      "description": "Basic Korean words.",
+      "category": "language",
       "deck_cards_total": 1,
       "deck_card_list": [
         {
@@ -306,10 +364,15 @@ list of all decks of a user, grouped by deck list
 }
 ```
 
-### user list / users paginated results
+## _user list / users paginated results_
 
-list of paginated users,
-with all cards grouped by card collection
+| Method | Status | Endpoint                                     |
+| :----: | -----: | :------------------------------------------- |
+|  GET   |    200 | `/api/list-all?resource=users&grouped=cards` |
+
+    # results list of paginated users,
+      with all cards grouped by card collection.
+    # Response:
 
 ```json
 {
@@ -325,6 +388,8 @@ with all cards grouped by card collection
           "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "deck_title": "forgot",
+          "description": "Basic Korean words.",
+          "category": "language",
           "foreign_word": "여보세요",
           "translation": "hello",
           "definition": "greetings",
@@ -338,10 +403,13 @@ with all cards grouped by card collection
 }
 ```
 
-### user list / users paginated results
+| Method | Status | Endpoint                                     |
+| :----: | -----: | :------------------------------------------- |
+|  GET   |    200 | `/api/list-all?resource=users&grouped=decks` |
 
-list of paginated users,
-with all cards grouped by decks
+    # results list of paginated users,
+      with all cards grouped by decks.
+    # Response:
 
 ```json
 {
@@ -355,6 +423,8 @@ with all cards grouped by decks
         {
           "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "deck_title": "forgot",
+          "description": "Basic Korean words.",
+          "category": "language",
           "deck_cards_total": 1,
           "deck_card_list": [
             {
@@ -375,10 +445,13 @@ with all cards grouped by decks
 }
 ```
 
-### user list / users paginated results
+| Method | Status | Endpoint                       |
+| :----: | -----: | :----------------------------- |
+|  GET   |    200 | `/api/list-all?resource=users` |
 
-list of paginated users,
-no cards and decks
+    # results list of paginated users,
+      no cards and decks.
+    # Response:
 
 ```json
 {

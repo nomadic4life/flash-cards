@@ -1,6 +1,6 @@
 const authenticationRoutes = require("./authenticationRoutes");
 const generalRoutes = require("./generalRoutes");
-const { userModel } = require("../models");
+const { testModel } = require("../models");
 const { isAuthenticated } = require("../middleware");
 
 // root route for sanity check
@@ -34,7 +34,7 @@ module.exports = router => {
   // all routes are passed into router
   authenticationRoutes(router);
   router.get("/test", async (req, res) => {
-    const users = await userModel.allUsers();
+    const users = await testModel.all();
     res.status(200).json(users);
   });
 
