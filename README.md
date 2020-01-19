@@ -101,6 +101,7 @@ Routes
         {
           "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
           "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "grammer_type": "verb",
           "foreign_word": "여보세요",
           "translation": "hello",
           "definition": "greetings",
