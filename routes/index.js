@@ -39,8 +39,11 @@ module.exports = router => {
     // );
     // res.status(200).json(users);
 
-    const decks = await deckModel.listDecks({});
-    res.status(200).json(decks);
+    // const decks = await deckModel.listDecks({});
+    // res.status(200).json(decks);
+
+    const user = await userModel.findUser({ username: "testuser" })
+    res.status(200).json(user);
   });
 
   router.use(isAuthenticated);

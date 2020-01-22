@@ -464,3 +464,34 @@ Routes
   ]
 }
 ```
+
+appellative
+append
+amalgamation
+elucidate
+composition
+statement
+structure
+footnote
+
+```json
+{
+  "appellation": {
+    "meta_data": {
+      "created_by": "username",
+      "created_at": "datetime string"
+    },
+    "description": {
+      "comment": "text"
+    }
+  }
+}
+
+{
+  "file_assets": {
+    "illustrations": [],
+    "audio_clips": [],
+    "media_clips": []
+  }
+}
+```

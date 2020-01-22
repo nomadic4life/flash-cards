@@ -5,7 +5,7 @@ const userDependencyDatabaseInjection = db => {
   const findUser = ({ username }) => {
     return db("user")
       .where({ username })
-      .first("id", "username", "password");
+      .first("id", "username", "email", "password");
   };
 
   const createUser = ({ username, password }) => {
