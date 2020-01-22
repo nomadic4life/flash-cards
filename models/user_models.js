@@ -112,18 +112,6 @@ const userDependencyDatabaseInjection = db => {
             addTags("deck_id", "deck_tags", deckTags, card);
 
             addTags("card_id", "card_tags", cardTags, card);
-
-            // if (deckTags[card.deck_id] === undefined) {
-            //   deckTags[card.deck_id] = new Set();
-            // } else {
-            //   deckTags[card.deck_id].add(card.deck_tags);
-            // }
-
-            // if (cardTags[card.card_id] === undefined) {
-            //   cardTags[card.card_id] = new Set();
-            // } else {
-            //   cardTags[card.card_id].add(card.card_tags);
-            // }
           }
 
           return { decks, cards, memo, deckTags, cardTags };
