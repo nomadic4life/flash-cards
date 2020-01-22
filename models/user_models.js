@@ -65,45 +65,71 @@ const userDependencyDatabaseInjection = db => {
       .then(data => {
 
         const filterData = () => {
-          const memo = {};
-          const decks = [];
-          const cards = [];
-          const deck_tags = {};
-          const card_tags = {};
+          const memo = {},
+            deckTags = {},
+            cardTags = {},
+            decks = [],
+            cards = [];
+
+          const addResource = (id, card, resource, memo) => {
+            if (!memo[id]) {
+              memo[id] = card;
+              resource.push(id);
+            }
+          }
+
+          const addDeck = (deck_id, card, decks, memo) => {
+            addResource(deck_id, card, decks, memo);
+          }
+
+          const addCard = (card_id, deck_id, card, cards, memo) => {
+            const userCard = card_id + '--' + deck_id;
+            addResource(userCard, card, cards, memo);
+          }
+
+          const addTags = (idType, tagType, tagCollection, card) => {
+
+            const id = card[idType];
+            const tag = card[tagType];
+
+            if (tagCollection[id] === undefined) {
+
+              return tagCollection[id] = new Set();
+            }
+
+            tagCollection[id].add(tag);
+          }
 
           for (let i = 0; i < data.length; i++) {
             const card = data[i];
             const deck_id = card.deck_id;
             const card_id = card.card_id;
 
-            if (!memo[deck_id]) {
-              memo[deck_id] = card;
-              decks.push(card.deck_id);
-            }
+            addDeck(deck_id, card, decks, memo);
 
-            const userCard = card_id + '--' + deck_id;
-            if (!memo[userCard]) {
-              memo[userCard] = card;
-              cards.push(userCard);
-            }
+            addCard(card_id, deck_id, card, cards, memo);
 
-            if (deck_tags[card.deck_id] === undefined) {
-              deck_tags[card.deck_id] = new Set();
-            } else {
-              deck_tags[card.deck_id].add(card.deck_tags);
-            }
+            addTags("deck_id", "deck_tags", deckTags, card);
 
-            if (card_tags[card.card_id] === undefined) {
-              card_tags[card.card_id] = new Set();
-            } else {
-              card_tags[card.card_id].add(card.card_tags);
-            }
+            addTags("card_id", "card_tags", cardTags, card);
+
+            // if (deckTags[card.deck_id] === undefined) {
+            //   deckTags[card.deck_id] = new Set();
+            // } else {
+            //   deckTags[card.deck_id].add(card.deck_tags);
+            // }
+
+            // if (cardTags[card.card_id] === undefined) {
+            //   cardTags[card.card_id] = new Set();
+            // } else {
+            //   cardTags[card.card_id].add(card.card_tags);
+            // }
           }
 
-          return { decks, cards, memo, deck_tags, card_tags };
+          return { decks, cards, memo, deckTags, cardTags };
         }
 
-        const { decks, cards, memo, deck_tags, card_tags } = filterData();
+        const { decks, cards, memo, deckTags, cardTags } = filterData();
 
         const mapCard = deck_id => {
 
@@ -131,7 +157,7 @@ const userDependencyDatabaseInjection = db => {
                 append: card.append,
                 additional_info: {
                   meta_data: card.additional_info.meta_data,
-                  tags: [...card_tags[card.card_id]],
+                  tags: [...cardTags[card.card_id]],
                   notes: card.append
                 }
               };
@@ -153,7 +179,7 @@ const userDependencyDatabaseInjection = db => {
               thumbnail: deck.deck_info.thumbnail,
               description: deck.deck_info.description,
               category: deck.category,
-              tags: [...deck_tags[id]],
+              tags: [...deckTags[id]],
               deck_cards_total: collection.length,
               collection
             }
