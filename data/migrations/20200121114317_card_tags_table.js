@@ -5,7 +5,7 @@ exports.up = function (knex) {
       tbl
         .uuid('card_id')
         .references('id')
-        .inTable('card')
+        .inTable('user_card')
         .notNullable();
 
       tbl

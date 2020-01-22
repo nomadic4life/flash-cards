@@ -361,7 +361,7 @@ const generateData = async () => {
   const { cardCollection,
     userCardCollection } = await generateUserCards(users, cards);
 
-  const card_tags = await generateCardTags(cards, tag);
+  const card_tags = await generateCardTags(cardCollection, tag);
 
   // console.log('\ncardCollection', cardCollection.length);
 
