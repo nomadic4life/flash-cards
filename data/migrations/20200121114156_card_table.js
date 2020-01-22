@@ -44,6 +44,10 @@ exports.up = function (knex) {
         .notNullable();
 
       tbl
+        .text('definition')
+        .nullable();
+
+      tbl
         .json('file_assets')
         .nullable();
 
@@ -61,9 +65,6 @@ exports.up = function (knex) {
       //   .notNullable()
       //   .defaultTo('English');
 
-      // tbl
-      //   .text('definition')
-      //   .nullable();
 
       // tbl
       //   .string('image', 512)

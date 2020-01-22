@@ -39,7 +39,8 @@ exports.up = function (knex) {
             'moderate',
             'expert'
           ])
-        .notNullable();
+        .notNullable()
+        .defaultTo('new');
 
       tbl
         .json('review_session')
