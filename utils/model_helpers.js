@@ -32,27 +32,42 @@ const deckInfo = (deck, collection, deckTags) => {
   }
 }
 
-const cardInfo = (card, cardTags) => {
+const cardInfo = (user_id, card, cardTags) => {
+
   const id = card.card_id;
+  let user_card_info = {};
+  let user_card_notes = {};
+
+  if (user_id === card.user_id) {
+
+    user_card_info = {
+      failed_attempts: card.failed_attempts, // user_card
+      successful_attempts: card.successful_attempts, // user_card
+      rating: card.rating, // user_card
+      review_session: card.review_session ? card.review_session : {}, // user_card
+    };
+
+    user_card_notes = {
+      notes: card.append ? card.append : {}
+    }; // user_card
+  }
+
   return {
     // card information
-    card_id: card.user_card_id,
+    card_id: user_id === card.user_id ? card.user_card_id : card.card_id,
+    parts_of_speech: card.parts_of_speech,
     foreign_language: card.foreign_language,
     native_language: card.native_language,
-    parts_of_speech: card.parts_of_speech,
     foreign_word: card.foreign_word,
     translation: card.translation,
     definition: card.definition,
     illustrations: card.file_assets.visuals,
     audio: card.file_assets.audio,
-    failed_attempts: card.failed_attempts,
-    successful_attempts: card.successful_attempts,
-    rating: card.rating,
-    review_session: card.review_session,
+    ...user_card_info,
     additional_info: {
       meta_data: card.additional_info.meta_data,
       tags: cardTags[id] ? [...cardTags[id]] : [],
-      notes: card.append
+      ...user_card_notes
     }
   };
 }
@@ -156,12 +171,12 @@ const processData = data => {
   return operations
 }
 
-const mapCard = (memo, deck_id, cards, cardTags) => {
+const mapCard = (user_id, memo, deck_id, cards, cardTags) => {
   return cards
     .filter(card => deck_id === memo[card].deck_id)
     .map(id => {
       const card = memo[id];
-      return cardInfo(card, cardTags);
+      return cardInfo(user_id, card, cardTags);
     })
 }
 

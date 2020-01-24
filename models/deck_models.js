@@ -1,7 +1,7 @@
 const { processData, deckInfo, mapCard } = require("../utils/model_helpers")
 
 const userDependencyDatabaseInjection = db => {
-  const listDecks = ({ page = 0, perPage = 15 }) => {
+  const listDecks = ({ user_id, page = 0, perPage = 15 }) => {
 
     return db
       .from('deck_collection')
@@ -71,15 +71,17 @@ const userDependencyDatabaseInjection = db => {
           .addCardTag()
           .run();
 
-        return decks.map(id => {
-          const deck = memo[id];
-          const collection = mapCard(memo, id, cards, cardTags);
+        return {
+          decks: decks.map(id => {
+            const deck = memo[id];
+            const collection = mapCard(user_id, memo, id, cards, cardTags);
 
-          return deckInfo(deck, collection, deckTags)
-            .userInfo()
-            .dateTimeInfo()
-            .results();
-        });
+            return deckInfo(deck, collection, deckTags)
+              .userInfo()
+              .dateTimeInfo()
+              .results();
+          })
+        };
       });
   };
 

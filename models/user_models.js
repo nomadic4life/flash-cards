@@ -53,7 +53,7 @@ const userDependencyDatabaseInjection = db => {
         'card_tags.tag as card_tags',
         'user_card.id as user_card_id',
         'card.foreign_language as foreign_language',
-        'card.native_language as native_lanuage',
+        'card.native_language as native_language',
         'card.parts_of_speech as parts_of_speech',
         'card.foreign_word as foreign_word',
         'card.translation as translation',
@@ -82,7 +82,7 @@ const userDependencyDatabaseInjection = db => {
 
         const deckList = decks.map(id => {
           const deck = memo[id];
-          const collection = mapCard(memo, id, cards, cardTags);
+          const collection = mapCard(user_id, memo, id, cards, cardTags);
 
           return deckInfo(deck, collection, deckTags)
             .dateTimeInfo()
