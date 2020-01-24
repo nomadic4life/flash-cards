@@ -91,26 +91,50 @@ Routes
   "username": "testuser",
   "total_decks": 1,
   "total_cards": 1,
-  "user_decks": [
+  "deck_list": [
     {
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
-      "deck_title": "forgot",
+      "deck_title": "Study Korean",
+      "thumbnail": "http://someurl.com/image.png",
       "description": "Basic Korean words.",
       "category": "language",
-      "user_deck_cards_list": [
+      "deck_card_total": 1,
+      "tags": [
+        "food",
+        "family",
+      ],
+      "collection": [
         {
-          "user_card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
-          "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
-          "grammer_type": "verb",
+          "card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "parts_of_speech": "verb",
+          "foreign_language": "Korean",
+          "native_language": "English",
           "foreign_word": "여보세요",
           "translation": "hello",
-          "definition": "greetings",
-          "image": "null",
-          "audio": "null",
-          "animation": "null",
+          "definition": "Ut ullam qui omnis qui.",
+          "visuals": [
+            "http://someurl.com"
+          ],
+          "audio": [
+            "http://someurl.com"
+          ],
           "failed_attempts": 0,
           "successful_attempts": 0,
-          "review_date": "datestring"
+          "rating": "new",
+          "review_session": [],
+          "additional_info": {
+            "meta_data": {
+              "created_by": "kelvin_sauer",
+              "created_at": 1579726461761
+            },
+            "tags": [
+                "family",
+                "fun",
+                "ideas",
+                "color"
+            ],
+            "notes": null
+          }
         }
       ]
     }

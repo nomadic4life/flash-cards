@@ -1,3 +1,5 @@
+const { processData, mapCard, deckInfo, userInfo } = require('../utils/model_helpers')
+
 const userDependencyDatabaseInjection = db => {
   // should return user info
   // should return no user if not found
@@ -30,9 +32,9 @@ const userDependencyDatabaseInjection = db => {
       .innerJoin('user',
         'deck.user_id',
         'user.id')
-      .innerJoin('category',
-        'category.appellation',
-        'deck.category')
+      // .innerJoin('category',
+      //   'category.appellation',
+      //   'deck.category')
       .innerJoin('deck_tags',
         'deck_tags.deck_id',
         'deck.id')
@@ -42,6 +44,7 @@ const userDependencyDatabaseInjection = db => {
       .select(
         'user.id as user_id',
         'user.username',
+        'user.avatar',
         'card.id as card_id',
         'deck.id as deck_id',
         'deck.additional_info as deck_info',
@@ -64,129 +67,29 @@ const userDependencyDatabaseInjection = db => {
         'user_card.append as append')
       .then(data => {
 
-        const filterData = () => {
-          const memo = {},
-            deckTags = {},
-            cardTags = {},
-            decks = [],
-            cards = [];
+        const {
+          decks,
+          cards,
+          memo,
+          deckTags,
+          cardTags
+        } = processData(data)
+          .addDeck()
+          .addCard()
+          .addDeckTag()
+          .addCardTag()
+          .run();
 
-          const addResource = (id, card, resource, memo) => {
-            if (!memo[id]) {
-              memo[id] = card;
-              resource.push(id);
-            }
-          }
+        const deckList = decks.map(id => {
+          const deck = memo[id];
+          const collection = mapCard(memo, id, cards, cardTags);
 
-          const addDeck = (deck_id, card, decks, memo) => {
-            addResource(deck_id, card, decks, memo);
-          }
+          return deckInfo(deck, collection, deckTags)
+            .dateTimeInfo()
+            .results();
+        });
 
-          const addCard = (card_id, deck_id, card, cards, memo) => {
-            const userCard = card_id + '--' + deck_id;
-            addResource(userCard, card, cards, memo);
-          }
-
-          const addTags = (idType, tagType, tagCollection, card) => {
-
-            const id = card[idType];
-            const tag = card[tagType];
-
-            if (tagCollection[id] === undefined) {
-
-              return tagCollection[id] = new Set();
-            }
-
-            tagCollection[id].add(tag);
-          }
-
-          for (let i = 0; i < data.length; i++) {
-            const card = data[i];
-            const deck_id = card.deck_id;
-            const card_id = card.card_id;
-
-            addDeck(deck_id, card, decks, memo);
-
-            addCard(card_id, deck_id, card, cards, memo);
-
-            addTags("deck_id", "deck_tags", deckTags, card);
-
-            addTags("card_id", "card_tags", cardTags, card);
-          }
-
-          return { decks, cards, memo, deckTags, cardTags };
-        }
-
-        const { decks, cards, memo, deckTags, cardTags } = filterData();
-
-        const mapCard = deck_id => {
-
-          return cards
-            .filter(card => deck_id === memo[card].deck_id)
-            .map(id => {
-
-              const card = memo[id];
-
-              return {
-                // card information
-                card_id: card.user_card_card,
-                foreign_language: card.foreign_language,
-                native_language: card.native_language,
-                parts_of_speech: card.parts_of_speech,
-                foreign_word: card.foreign_word,
-                translation: card.translation,
-                definition: card.definition,
-                illustrations: card.file_assets.visuals,
-                audio: card.file_assets.audio,
-                failed_attempts: card.failed_attempts,
-                successful_attempts: card.successful_attempts,
-                rating: card.rating,
-                review_session: card.review_session,
-                append: card.append,
-                additional_info: {
-                  meta_data: card.additional_info.meta_data,
-                  tags: [...cardTags[card.card_id]],
-                  notes: card.append
-                }
-              };
-
-            })
-        }
-
-        const mapDeck = () => {
-
-          return decks.map(id => {
-
-            const deck = memo[id];
-            const collection = mapCard(id)
-
-            return {
-              // deck information
-              deck_id: id,
-              deck_title: deck.deck_info.deck_title,
-              thumbnail: deck.deck_info.thumbnail,
-              description: deck.deck_info.description,
-              category: deck.category,
-              tags: [...deckTags[id]],
-              deck_cards_total: collection.length,
-              collection
-            }
-          })
-        }
-
-        const deckList = mapDeck();
-
-        const results = {
-          // user information
-          user_id,
-          username: data[0].username,
-          total_decks: decks.length,
-          total_cards: cards.length,
-          deck_list: deckList
-        };
-
-        return results;
-
+        return userInfo(data[0], deckList, cards);
       });
   };
 
