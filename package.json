@@ -6,7 +6,7 @@
   "author": "nomadic4life <orbison.dennis@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watch",
+    "test": "cross-env DB_ENV=testing jest --watch",
     "server": "nodemon index.js"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "cross-env": "^6.0.3",
     "faker": "^4.1.0",
     "jest": "^24.9.0",
     "nodemon": "^2.0.2",

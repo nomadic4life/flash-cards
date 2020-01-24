@@ -4,8 +4,10 @@ const {
   authenticateUser,
   generateToken,
   isValidUsername,
+  isValidEmail,
   isValidPassword,
   ifUserExist,
+  // storeAvatar,
   createNewUser
 } = require("../middleware");
 
@@ -18,8 +20,10 @@ module.exports = router => {
     "/auth/signup",
     [
       isValidUsername,
+      isValidEmail,
       ifUserExist,
       isValidPassword,
+      // storeAvatar,
       createNewUser,
       generateToken
     ],

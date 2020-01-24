@@ -17,14 +17,18 @@ module.exports = {
     useNullAsDefault: true
   },
 
-  test: {
+  testing: {
     client: "pg",
-    connection: "postgress://localhost/test",
+    connection: "postgres://postgres:pgpassword@localhost/test_flash_cards",
     migrations: {
       directory: "./data/migrations"
     },
     seeds: {
       directory: "./data/seeds/test"
+    },
+    pool: {
+      min: 2,
+      max: 10
     },
     useNullAsDefault: true
   },
