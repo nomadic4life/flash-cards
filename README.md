@@ -89,6 +89,7 @@ Routes
 {
   "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
   "username": "testuser",
+  "avatar": "http://avatar.com",
   "total_decks": 1,
   "total_cards": 1,
   "deck_list": [
@@ -112,7 +113,7 @@ Routes
           "foreign_word": "여보세요",
           "translation": "hello",
           "definition": "Ut ullam qui omnis qui.",
-          "visuals": [
+          "illustrations": [
             "http://someurl.com"
           ],
           "audio": [
@@ -121,19 +122,19 @@ Routes
           "failed_attempts": 0,
           "successful_attempts": 0,
           "rating": "new",
-          "review_session": [],
+          "review_session": {},
           "additional_info": {
             "meta_data": {
               "created_by": "kelvin_sauer",
               "created_at": 1579726461761
             },
             "tags": [
-                "family",
-                "fun",
-                "ideas",
-                "color"
+              "family",
+              "fun",
+              "ideas",
+              "color"
             ],
-            "notes": null
+            "notes": {}
           }
         }
       ]
@@ -250,6 +251,7 @@ Routes
 |  GET   |    200 | `/api/list-all?resource=decks` |
 
     # results list of decks are paginated.
+    # logged in user deck
     # Response:
 
 ```json
@@ -259,19 +261,101 @@ Routes
       "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
       "username": "testuser",
-      "deck_title": "forgot",
+      "avatar": "http://avatar.com",
+      "deck_title": "Study Korean",
+      "thumbnail": "http://someurl.com/image.png",
       "description": "Basic Korean words.",
+      "category": "language",
+      "created_at": 1579726461765,
+      "updated_at": 1579726461765,
       "deck_card_total": 1,
-      "deck_card_list": [
+      "tags": [],
+      "collection": [
         {
           "card_id": "e091bdcd-2c08-4e5e-852c-289b75ba6f18",
-          "category": "language",
+          "parts_of_speech": "verb",
+          "foreign_language": "Korean",
+          "native_language": "English",
           "foreign_word": "여보세요",
           "translation": "hello",
-          "definition": "greetings",
-          "image": "null",
-          "audio": "null",
-          "animation": "null"
+          "definition": "Ut ullam qui omnis qui.",
+          "illustrations": [
+            "http://someurl.com"
+          ],
+          "audio": [
+            "http://someurl.com"
+          ],
+          "failed_attempts": 0,
+          "successful_attempts": 0,
+          "rating": "new",
+          "review_session": {},
+          "additional_info": {
+            "meta_data": {
+              "created_by": "kelvin_sauer",
+              "created_at": 1579726461761
+            },
+            "tags": [
+              "family",
+              "fun",
+              "ideas",
+              "color"
+            ],
+            "notes": {}
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+    # results list of decks are paginated.
+    # regular deck
+    # Response:
+
+```json
+{
+  "decks": [
+    {
+      "deck_id": "d091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "user_id": "u091bdcd-2c08-4e5e-852c-289b75ba6f18",
+      "username": "testuser",
+      "avatar": "http://avatar.com",
+      "deck_title": "Study Korean",
+      "thumbnail": "http://someurl.com/image.png",
+      "description": "Basic Korean words.",
+      "category": "language",
+      "created_at": 1579726461765,
+      "updated_at": 1579726461765,
+      "deck_card_total": 1,
+      "tags": [],
+      "collection": [
+        {
+          "card_id": "c091bdcd-2c08-4e5e-852c-289b75ba6f18",
+          "parts_of_speech": "verb",
+          "foreign_language": "Korean",
+          "native_language": "English",
+          "foreign_word": "여보세요",
+          "translation": "hello",
+          "definition": "Ut ullam qui omnis qui.",
+          "illustrations": [
+            "http://someurl.com"
+          ],
+          "audio": [
+            "http://someurl.com"
+          ],
+          "additional_info": {
+            "meta_data": {
+              "created_by": "kelvin_sauer",
+              "created_at": 1579726461761
+            },
+            "tags": [
+              "family",
+              "fun",
+              "ideas",
+              "color"
+            ],
+          }
         }
       ]
     }
