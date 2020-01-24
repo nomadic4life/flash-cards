@@ -1,5 +1,5 @@
-const StatusError = require("../utils/errors");
-const bcrypt = require("bcrypt");
+const StatusError = require('../utils/errors');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const isValidPassword = async (req, res, next) => {
@@ -15,13 +15,13 @@ const isValidPassword = async (req, res, next) => {
   // no spaces
   // use regEx to validate
 
-  if (password.includes(" ")) {
-    return next(new StatusError("Password must not contain spaces.", 400));
+  if (password.includes(' ')) {
+    return next(new StatusError('Password must not contain spaces.', 400));
   }
 
   if (password.length < 6) {
     return next(
-      new StatusError("Password must have at least 6 characters.", 400)
+      new StatusError('Password must have at least 6 characters.', 400)
     );
   }
 
