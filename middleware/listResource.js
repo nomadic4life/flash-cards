@@ -1,6 +1,6 @@
-const { userModel, deckModel, cardModel } = require("../models");
+const { userModel, deckModel, cardModel } = require('../models');
 const listResource = async (req, res, next) => {
-  let { resource = "users", page = 0, perPage = 10 } = req.query;
+  let { resource = 'users', page = 0, perPage = 10 } = req.query;
 
   const resourceList = {
     users: userModel
@@ -9,7 +9,7 @@ const listResource = async (req, res, next) => {
   };
 
   if (!resource || !resourceList[resource]) {
-    resource = "users";
+    resource = 'users';
   }
 
   const resourceModel = resourceList[resource];

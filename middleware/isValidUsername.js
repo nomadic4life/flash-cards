@@ -1,4 +1,4 @@
-const StatusError = require("../utils/errors");
+const StatusError = require('../utils/errors');
 
 const isValidUsername = async (req, res, next) => {
   let { username } = req.user;
@@ -11,8 +11,8 @@ const isValidUsername = async (req, res, next) => {
   // contain no spaces
   // use regEx to validate
 
-  if (username.includes(" ")) {
-    return next(new StatusError("Username must not contain spaces.", 400));
+  if (username.includes(' ')) {
+    return next(new StatusError('Username must not contain spaces.', 400));
   }
 
   req.user.username = username;

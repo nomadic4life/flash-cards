@@ -1,17 +1,17 @@
-const generateToken = require("./generateToken");
-const jwt = require("jsonwebtoken");
-const secret = process.env.JWT_SECRET || "temp";
+const generateToken = require('./generateToken');
+const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_SECRET || 'temp';
 
-describe("generateToken middleware", () => {
-  it("should call next(), auth header set with jwt token", () => {
+describe('generateToken middleware', () => {
+  it('should call next(), auth header set with jwt token', () => {
     const req = {
       user: {
         id: 0,
-        username: "testuser"
+        username: 'testuser'
       }
     };
     const res = {
-      set: function(key, prop) {
+      set: function (key, prop) {
         return (res.headers = {
           [key]: prop
         });
@@ -20,7 +20,7 @@ describe("generateToken middleware", () => {
 
     const payload = {
       id: 0,
-      username: "testuser"
+      username: 'testuser'
     };
 
     return new Promise(resolve => {
@@ -31,10 +31,10 @@ describe("generateToken middleware", () => {
       });
     }).then(result => {
       let { Authorization } = res.headers;
-      Authorization = Authorization.split(" ");
+      Authorization = Authorization.split(' ');
       expect(true).toBe(true);
-      expect(res.headers).toHaveProperty("Authorization");
-      expect(Authorization[0]).toBe("bearer");
+      expect(res.headers).toHaveProperty('Authorization');
+      expect(Authorization[0]).toBe('bearer');
       expect(Authorization[1]).toBe(jwt.sign(payload, secret));
     });
   });
