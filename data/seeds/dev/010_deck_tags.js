@@ -10,6 +10,19 @@ exports.seed = function (knex) {
     .del()
     .then(function () {
       // Inserts seed entries
-      return knex('deck_tags').insert([...jsonContent.deck_tags]);
+      return knex('deck_tags').insert([
+        {
+          deck_id: '087e8be3-1fce-45f6-0123-45be63d3ebaf',
+          tag: 'travel'
+        },
+        {
+          deck_id: '087e8be3-1fce-45f6-0132-45be63d3ebaf',
+          tag: 'space'
+        },
+        {
+          deck_id: '087e8be3-1fce-45f6-0124-45be63d3ebaf',
+          tag: 'ideas'
+        },
+        ...jsonContent.deck_tags]);
     });
 };

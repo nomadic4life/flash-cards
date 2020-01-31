@@ -17,6 +17,7 @@ exports.seed = function (knex) {
       return knex('user').insert([
         {
           id: '2c5ea4c0-4067-11e9-8bad-9b1deb4d3b7d',
+          avatar: 'testuser_avatar.jpeg',
           username: 'testuser',
           email: 'testuser@test.com',
           password: bcrypt.hashSync('TestPass', saltRounds)

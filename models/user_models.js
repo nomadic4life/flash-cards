@@ -59,10 +59,10 @@ const userDependencyDatabaseInjection = db => {
       // .innerJoin('category',
       //   'category.appellation',
       //   'deck.category')
-      .innerJoin('deck_tags',
+      .fullOuterJoin('deck_tags',
         'deck_tags.deck_id',
         'deck.id')
-      .innerJoin('card_tags',
+      .fullOuterJoin('card_tags',
         'card_tags.card_id',
         'user_card.id')
       .select(
