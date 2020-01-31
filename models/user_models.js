@@ -1,19 +1,43 @@
-const { processData, mapCard, deckInfo, userInfo } = require('../utils/model_helpers')
+const { processData, mapCard, deckInfo, userInfo } = require('../utils/model_helpers');
+const uuid = require('uuid/v4');
 
 const userDependencyDatabaseInjection = db => {
   // should return user info
   // should return no user if not found
   // should return error 500 if something unexpected happened
-  const findUser = ({ username }) => {
+  const findUser = ({ username, email = '' }) => {
     return db('user')
       .where({ username })
-      .first('id', 'username', 'email', 'password');
+      .orWhere({ email })
+      .first('id', 'username', 'avatar', 'email', 'password');
   };
 
-  const createUser = ({ username, password }) => {
-    return db('user')
-      .insert({ username, password })
-      .findUser({ username });
+  const createUser = async ({ username, email, avatar, password, path }) => {
+    const id = uuid();
+    const result = await db('user')
+      .insert({
+        id,
+        username,
+        email,
+        avatar,
+        password
+      }, [
+        'id',
+        'username',
+        'avatar',
+      ]).then(data => {
+        const [user] = data
+        return {
+          id: user.id,
+          username: user.username,
+          avatar: path + user.avatar,
+          total_decks: 0,
+          total_cards: 0,
+          deck_list: [],
+        }
+      })
+
+    return result
   };
 
   const userData = user_id => {

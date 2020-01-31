@@ -9,24 +9,36 @@ const error = () => {
   }
 };
 
-const findUser = ({ username }) => {
+const findUser = ({ username, email }) => {
   if (username === "error") {
     throw new StatusError("Server Error.", 500);
   }
+  let results;
 
-  return username === "testuser" ? dummyData.users[0] : undefined;
+
+  results = username === "testuser"
+    ? dummyData.users[0]
+    : email === "testuser@test.com"
+      ? dummyData.users[0]
+      : undefined;
+
+  return results
 };
 
-const createUser = ({ username, password }) => {
+const createUser = ({ username, email, avatar, password }) => {
   if (username === "error") {
     throw new StatusError("Server Error.", 500);
   }
 
-  return {
+  return [{
     id: dummyData.users.length,
+    avatar,
     username,
-    password
-  };
+    email,
+    password,
+    created_at: Date.now(),
+    updated_at: Date.now()
+  }];
 };
 
 const fetchAll = ({ page, perPage }) => {

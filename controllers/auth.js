@@ -22,7 +22,8 @@ const login = async (req, res) => {
 // create token
 // send token to client
 const signup = async (req, res) => {
-  res.status(201).end();
+  const { user } = req
+  res.status(201).json(user);
 };
 
 module.exports = {
