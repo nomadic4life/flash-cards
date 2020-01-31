@@ -91,6 +91,9 @@ const userDependencyDatabaseInjection = db => {
         'user_card.append as append')
       .then(data => {
 
+        if (!data.length) return
+
+
         const {
           decks,
           cards,
