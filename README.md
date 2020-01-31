@@ -1,3 +1,7 @@
+bugs
+- there is a bug in our user models and maybe all models, need to implement error handler coming from models
+- need to investigate this issue caused by foreign key constraint from deck catagory not existing from category table
+
 users
 
 - users have decks

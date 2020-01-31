@@ -16,8 +16,8 @@ const login = async (req, res) => {
       user_id: req.user.id,
       username: req.user.username,
       avatar: req.user.avatar,
-      deck_total: 0,
-      card_total: 0,
+      total_decks: 0,
+      total_cards: 0,
       deck_list: []
     }
   }
