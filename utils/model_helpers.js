@@ -7,6 +7,7 @@ const deckInfo = (deck, collection, deckTags) => {
     userInfo() {
       userInfo.user_id = deck.user_id; // 1
       userInfo.username = deck.username; // 2
+      userInfo.avatar = deck.avatar; // 2
       return this
     },
     dateTimeInfo() {
