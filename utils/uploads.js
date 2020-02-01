@@ -30,8 +30,22 @@ const destination = (req, file, cb) => {
   cb(null, './uploads/avatar');
 }
 
+// could make a test for this.
+const thumbnailFilename = (req, file, cb) => {
+  const type = file.mimetype.split('/')[1];
+  const thumbnail = file.fieldname + '.' + type;
+  req.user.thumbnail = thumbnail;
+  cb(null, thumbnail);
+}
+
+const thumbnailDestination = (req, file, cb) => {
+  cb(null, './uploads/thumbnail');
+}
+
 module.exports = {
+  fileFilter,
   destination,
   filename,
-  fileFilter
+  thumbnailDestination,
+  thumbnailFilename,
 }
