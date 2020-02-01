@@ -151,6 +151,7 @@ const processData = data => {
   }
 
   const addCard = (card_id, deck_id, card, cards, memo) => {
+    if (card_id === null) return
     const userCard = card_id + '--' + deck_id;
     addResource(userCard, card, cards, memo);
   }
@@ -162,7 +163,7 @@ const processData = data => {
 
     if (tagCollection[id] === undefined) {
 
-      return tagCollection[id] = new Set();
+      tagCollection[id] = new Set();
     }
 
     tagCollection[id].add(tag);
