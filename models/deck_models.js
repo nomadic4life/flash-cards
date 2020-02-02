@@ -86,7 +86,7 @@ const userDependencyDatabaseInjection = db => {
       });
   };
 
-  const findTags = (tags) => {
+  const findTags = tags => {
     const executeDB = {
       trx(trx) {
         return executeDB.result(trx)
@@ -115,7 +115,7 @@ const userDependencyDatabaseInjection = db => {
     return executeDB;
   };
 
-  const getDeck = (id) => {
+  const getDeck = id => {
     const executeDB = {
       trx(trx) {
         return executeDB.result(trx)
@@ -232,7 +232,7 @@ const userDependencyDatabaseInjection = db => {
     return executeDB;
   };
 
-  const insertDeck = (deck) => {
+  const insertDeck = deck => {
     const executeDB = {
       trx(trx) {
         return executeDB.result(trx)
