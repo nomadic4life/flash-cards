@@ -87,7 +87,6 @@ const userDependencyDatabaseInjection = db => {
   };
 
   const getDeck = (id) => {
-
     const executeDB = {
       trx(trx) {
         return executeDB.result(trx)
@@ -174,7 +173,6 @@ const userDependencyDatabaseInjection = db => {
           })
       }
     }
-
     return executeDB
   }
 
@@ -206,10 +204,6 @@ const userDependencyDatabaseInjection = db => {
           return trx
             .from('category')
             .where('appellation', category)
-          // .then(cat => {
-          //   if (cat.length === 1) return
-          //   return trx.insert({ appellation: category }).into('category');
-          // })
         })
         .then(cat => {
           if (cat.length === 1) return
