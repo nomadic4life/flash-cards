@@ -86,7 +86,8 @@ const userDependencyDatabaseInjection = db => {
       });
   };
 
-  const getDeck = id => {
+  const getDeck = (db, id) => {
+
     return db
       .from('deck')
       .where('deck.id', id)
@@ -171,35 +172,64 @@ const userDependencyDatabaseInjection = db => {
   const createDeck = ({ user_id, deck_title, thumbnail, description, category, tags }) => {
 
     const id = uuid();
-    const datestamp = Data.now();
+    const datestamp = Date.now();
     const additional_info = JSON.stringify({
       deck_title,
       thumbnail,
       description,
       created_at: datestamp,
       updated_at: datestamp
-    })
+    });
 
-    return db
-      .from('deck')
-      .insert({
-        id,
-        user_id,
-        category,
-        additional_info
-      }, [
-        'id as deck_id',
-        'user_id',
-        'category',
-        'additional_info'
-      ])
-      .then(data => {
-        const [deck] = data;
-        const deck_tags = { [deck.deck_id]: tags || [] };
-        const result = deckInfo(data, [], deck_tags);
-        // .dateTimeInfo();
-        return result
-      })
+    // Using trx as a query builder:
+    return db.transaction(trx => {
+
+      return trx
+        .from('tag')
+        .whereIn('appellation', tags)
+        .then(tagList => {
+          tagList = new Set(tagList.map(tag => tag.appellation));
+          tag = tags.filter(tag => tagList.has(tag) === false)
+            .map(tag => ({ appellation: tag }));
+          return trx.insert(tag).into('tag');
+        })
+        .then(() => {
+          return trx
+            .from('category')
+            .where('appellation', category)
+          // .then(cat => {
+          //   if (cat.length === 1) return
+          //   return trx.insert({ appellation: category }).into('category');
+          // })
+        })
+        .then(cat => {
+          if (cat.length === 1) return
+          return trx.insert({ appellation: category }).into('category');
+        })
+        .then(() => {
+          return trx
+            .insert({
+              id,
+              user_id,
+              category,
+              additional_info
+            }).into('deck');
+        })
+        .then(() => {
+          tags = tags.map(tag => {
+            return {
+              deck_id: id,
+              tag
+            };
+          });
+
+          return trx
+            .insert(tags).into('deck_tags');
+        })
+        .then(() => {
+          return getDeck(trx, id);
+        });
+    });
   }
 
   return {
