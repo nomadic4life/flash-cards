@@ -86,87 +86,96 @@ const userDependencyDatabaseInjection = db => {
       });
   };
 
-  const getDeck = (db, id) => {
+  const getDeck = (id) => {
 
-    return db
-      .from('deck')
-      .where('deck.id', id)
-      .leftJoin('deck_collection',
-        'deck_collection.deck_id',
-        'deck.id')
-      .leftJoin('user_card',
-        'deck_collection.card_id',
-        'user_card.id')
-      .leftJoin('card',
-        'user_card.card_id',
-        'card.id')
-      .innerJoin('user',
-        'deck.user_id',
-        'user.id')
-      .innerJoin('category',
-        'category.appellation',
-        'deck.category')
-      .fullOuterJoin('deck_tags',
-        'deck_tags.deck_id',
-        'deck.id')
-      .fullOuterJoin('card_tags',
-        'card_tags.card_id',
-        'user_card.id')
-      .select(
-        'user.id as user_id',
-        'user.username',
-        'user.avatar',
-        'card.id as card_id',
-        'deck.id as deck_id',
-        'deck.additional_info as deck_info',
-        'deck.category as category',
-        'deck_tags.tag as deck_tags',
-        'card_tags.tag as card_tags',
-        'user_card.id as user_card_id',
-        'card.foreign_language as foreign_language',
-        'card.native_language as native_language',
-        'card.parts_of_speech as parts_of_speech',
-        'card.foreign_word as foreign_word',
-        'card.translation as translation',
-        'card.definition as definition',
-        'user_card.failed_attempts as failed_attempts',
-        'user_card.successful_attempts as successful_attempts',
-        'user_card.rating as rating',
-        'user_card.review_session as review_session',
-        'card.file_assets as file_assets',
-        'card.additional_info as additional_info',
-        'user_card.append as append')
-      .then(data => {
+    const executeDB = {
+      trx(trx) {
+        return executeDB.result(trx)
+      },
+      result(trx = db) {
+        return trx
+          .from('deck')
+          .where('deck.id', id)
+          .leftJoin('deck_collection',
+            'deck_collection.deck_id',
+            'deck.id')
+          .leftJoin('user_card',
+            'deck_collection.card_id',
+            'user_card.id')
+          .leftJoin('card',
+            'user_card.card_id',
+            'card.id')
+          .innerJoin('user',
+            'deck.user_id',
+            'user.id')
+          .innerJoin('category',
+            'category.appellation',
+            'deck.category')
+          .fullOuterJoin('deck_tags',
+            'deck_tags.deck_id',
+            'deck.id')
+          .fullOuterJoin('card_tags',
+            'card_tags.card_id',
+            'user_card.id')
+          .select(
+            'user.id as user_id',
+            'user.username',
+            'user.avatar',
+            'card.id as card_id',
+            'deck.id as deck_id',
+            'deck.additional_info as deck_info',
+            'deck.category as category',
+            'deck_tags.tag as deck_tags',
+            'card_tags.tag as card_tags',
+            'user_card.id as user_card_id',
+            'card.foreign_language as foreign_language',
+            'card.native_language as native_language',
+            'card.parts_of_speech as parts_of_speech',
+            'card.foreign_word as foreign_word',
+            'card.translation as translation',
+            'card.definition as definition',
+            'user_card.failed_attempts as failed_attempts',
+            'user_card.successful_attempts as successful_attempts',
+            'user_card.rating as rating',
+            'user_card.review_session as review_session',
+            'card.file_assets as file_assets',
+            'card.additional_info as additional_info',
+            'user_card.append as append')
+          .then(data => {
 
-        const {
-          decks,
-          cards,
-          memo,
-          deckTags,
-          cardTags
-        } = processData(data)
-          .addDeck()
-          .addCard()
-          .addDeckTag()
-          .addCardTag()
-          .run();
+            const {
+              decks,
+              cards,
+              memo,
+              deckTags,
+              cardTags
+            } = processData(data)
+              .addDeck()
+              .addCard()
+              .addDeckTag()
+              .addCardTag()
+              .run();
 
-        const deckList = decks.map(id => {
-          const deck = memo[id];
-          const collection = mapCard(data[0], memo, id, cards, cardTags);
+            const deckList = decks.map(id => {
+              const deck = memo[id];
+              const collection = mapCard(data[0], memo, id, cards, cardTags);
 
-          return deckInfo(deck, collection, deckTags)
-            .userInfo()
-            .dateTimeInfo()
-            .results();
-        });
+              return deckInfo(deck, collection, deckTags)
+                .userInfo()
+                .dateTimeInfo()
+                .results();
+            });
 
-        const deck = {
-          deck: deckList[0]
-        }
+            const deck = {
+              deck: deckList[0]
+            }
 
-        return deck;
-      })
+            return deck;
+          })
+      }
+    }
+
+    return executeDB
   }
 
   const createDeck = ({ user_id, deck_title, thumbnail, description, category, tags }) => {
@@ -227,7 +236,7 @@ const userDependencyDatabaseInjection = db => {
             .insert(tags).into('deck_tags');
         })
         .then(() => {
-          return getDeck(trx, id);
+          return getDeck(id).trx(trx);
         });
     });
   }
