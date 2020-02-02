@@ -24,9 +24,9 @@ const userDependencyDatabaseInjection = db => {
       .innerJoin('user',
         'user.id',
         'deck.user_id')
-      // .innerJoin('category',
-      //   'category.appellation',
-      //   'deck.category')
+      .innerJoin('category',
+        'category.appellation',
+        'deck.category')
       .fullOuterJoin('deck_tags',
         'deck_tags.deck_id',
         'deck.id')
@@ -89,12 +89,12 @@ const userDependencyDatabaseInjection = db => {
   const findTags = tags => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         return trx
           .from('tag')
-          .whereIn('appellation', tags)
+          .whereIn('appellation', tags);
       }
     };
     return executeDB;
@@ -103,7 +103,7 @@ const userDependencyDatabaseInjection = db => {
   const insertTags = (tags, tagList) => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         tagList = new Set(tagList.map(tag => tag.appellation));
@@ -118,7 +118,7 @@ const userDependencyDatabaseInjection = db => {
   const getDeck = id => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         return trx
@@ -199,7 +199,7 @@ const userDependencyDatabaseInjection = db => {
             }
 
             return deck;
-          })
+          });
       }
     };
     return executeDB;
@@ -208,7 +208,7 @@ const userDependencyDatabaseInjection = db => {
   const insertCategory = (existingCategory = [], category) => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         if (existingCategory.length === 1) return
@@ -221,12 +221,12 @@ const userDependencyDatabaseInjection = db => {
   const readCategory = category => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         return trx
           .from('category')
-          .where('appellation', category)
+          .where('appellation', category);
       }
     };
     return executeDB;
@@ -235,7 +235,7 @@ const userDependencyDatabaseInjection = db => {
   const insertDeck = deck => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         return trx
@@ -249,7 +249,7 @@ const userDependencyDatabaseInjection = db => {
   const insertDeckTags = (deck_id, tags) => {
     const executeDB = {
       trx(trx) {
-        return executeDB.result(trx)
+        return executeDB.result(trx);
       },
       result(trx = db) {
         tags = tags.map(tag => {
@@ -287,7 +287,7 @@ const userDependencyDatabaseInjection = db => {
           return insertTags(tags, tagList).trx(trx);
         })
         .then(() => {
-          return readCategory(category).trx(trx)
+          return readCategory(category).trx(trx);
         })
         .then(existingCategory => {
           return insertCategory(existingCategory, category).trx(trx);
@@ -301,7 +301,7 @@ const userDependencyDatabaseInjection = db => {
           }).trx(trx);
         })
         .then(() => {
-          return insertDeckTags(id, tags).trx(trx)
+          return insertDeckTags(id, tags).trx(trx);
         })
         .then(() => {
           return getDeck(id).trx(trx);
@@ -309,10 +309,47 @@ const userDependencyDatabaseInjection = db => {
     });
   };
 
+  const deleteResource = (resource, label, id) => {
+    const executeDB = {
+      trx(trx) {
+        return executeDB.result(trx);
+      },
+      result(trx = db) {
+        return trx.from(resource)
+          .where(label, id)
+          .del();
+      }
+    };
+    return executeDB;
+  };
+
+  const deleteDeck = id => {
+    // delete thumbnail middleware to remove image file
+    return db.transaction(trx => {
+      return deleteResource('deck_tags',
+        'deck_id',
+        id)
+        .trx(trx)
+        .then(() => {
+          return deleteResource('deck_collection',
+            'deck_id',
+            id)
+            .trx(trx);
+        })
+        .then(() => {
+          return deleteResource('deck',
+            'id',
+            id)
+            .trx(trx);
+        });
+    });
+  };
+
   return {
     getDeck,
     listDecks,
-    createDeck
+    createDeck,
+    deleteDeck
   };
 };
 
