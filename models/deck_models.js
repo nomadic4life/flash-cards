@@ -307,7 +307,7 @@ const userDependencyDatabaseInjection = db => {
           return getDeck(id).trx(trx);
         });
     });
-  }
+  };
 
   return {
     getDeck,
