@@ -5,6 +5,7 @@ const isValidPassword = require('./isValidPassword');
 const ifUserExist = require('./ifUserExist');
 const authenticateUser = require('./authenticateUser');
 const createNewUser = require('./createNewUser');
+const uploadAvatar = require('./uploadAvatar');
 const isValidEmail = require('./isValidEmail');
 const generateToken = require('./generateToken');
 const listResource = require('./listResource');
@@ -27,6 +28,7 @@ module.exports = augmentAsync({
   isValidPassword,
   ifUserExist,
   createNewUser,
+  uploadAvatar,
   isValidEmail,
   isAuthenticated,
   listResource

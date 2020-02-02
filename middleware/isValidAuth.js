@@ -1,7 +1,7 @@
 const StatusError = require('../utils/errors');
 
 const isValidAuth = async (req, res, next) => {
-  const { authorization } = req.headers;
+  const { authorization, email } = req.headers;
 
   if (!authorization) {
     return next(new StatusError('Username and Password required.', 401));
@@ -32,6 +32,8 @@ const isValidAuth = async (req, res, next) => {
     username,
     password
   };
+
+  req.body = { email }
 
   next();
 };

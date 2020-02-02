@@ -14,7 +14,6 @@ exports.up = function (knex) {
         .inTable('user')
         .notNullable();
 
-
       tbl
         .string('category')
         .references('appellation')
@@ -24,21 +23,6 @@ exports.up = function (knex) {
       tbl
         .json('additional_info')
         .nullable();
-
-      // tbl
-      //   .string('deck_title', 128)
-      //   .notNullable();
-
-      // tbl
-      //   .string('thumbnail', 512)
-      //   .nullable();
-
-      // tbl
-      //   .text('description')
-      //   .nullable();
-
-      // tbl
-      //   .timestamps(true, true);
     });
 };
 

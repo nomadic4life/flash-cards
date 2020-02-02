@@ -1,15 +1,18 @@
 const StatusError = require('../utils/errors');
 
-const ifUserExist = async (req, res, next) => {
+const isValidEmail = async (req, res, next) => {
     const { email } = req.body;
 
-    if (email.includes(' ')) {
+    if (!email) {
+        return next(new StatusError('Must provide email.', 400));
+    }
+
+    if (email && email.includes(' ')) {
         return next(new StatusError('Email must not contain spaces.', 400));
     }
 
     req.user.email = email;
-
     next();
 };
 
-module.exports = ifUserExist;
+module.exports = isValidEmail;

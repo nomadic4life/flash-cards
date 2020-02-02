@@ -131,7 +131,37 @@ describe('\nPOST /api/auth/login', () => {
 
 describe('\nPOST /api/auth/signup', () => {
   it('should return 201 http status code with Token.', () => {
-    const username = 'newtestuser',
+
+    const userInfo = {
+      username: 'newtestuser',
+      email: 'newtestuser@test.com',
+      password: 'TestPass'
+    };
+
+    const payload = {
+      id: dummyData.users.length,
+      username: userInfo.username
+    };
+
+    return request(server)
+      .post('/api/auth/signup')
+      .auth(userInfo.username, userInfo.password)
+      .set('email', userInfo.email)
+      .attach('avatar', 'utils/test_assets/noavatar-profile.jpg')
+      .then(response => {
+        const { authorization } = response.header;
+        const token = authorization.split(' ')[1]
+        expect(token).toBe(jwt.sign(payload, secret));
+        expect(response.body.avatar).toBe('newtestuser_avatar.jpeg');
+        expect(response.body.username).toBe(userInfo.username);
+        expect(response.body.email).toBe(userInfo.email);
+        expect(response.status).toBe(201);
+      });
+  });
+
+  it('should return 500 http status code.', () => {
+
+    const username = 'error',
       password = 'TestPass';
 
     const userInfo = {
@@ -141,24 +171,7 @@ describe('\nPOST /api/auth/signup', () => {
     return request(server)
       .post('/api/auth/signup')
       .auth(username, password)
-      .send(userInfo)
-      .then(response => {
-        const { authorization } = response.header;
-        const payload = {
-          id: dummyData.users.length,
-          username
-        };
-        expect(authorization.split(' ')[1]).toBe(jwt.sign(payload, secret));
-        expect(response.status).toBe(201);
-      });
-  });
-
-  it('should return 500 http status code.', () => {
-    const username = 'error',
-      password = 'TestPass';
-    return request(server)
-      .post('/api/auth/signup')
-      .auth(username, password)
+      .set('email', userInfo.email)
       .then(response => {
         expect(response.status).toBe(500);
       });
@@ -239,7 +252,7 @@ describe('\nPOST /api/auth/signup', () => {
     return request(server)
       .post('/api/auth/signup')
       .auth(username, password)
-      .send(userInfo)
+      .set('email', userInfo.email)
       .then(response => {
         const { message } = response.body;
         expect(message).toBe('Username already Taken.');
@@ -277,7 +290,7 @@ describe('\nPOST /api/auth/signup', () => {
     return request(server)
       .post('/api/auth/signup')
       .auth(username, password)
-      .send(userInfo)
+      .set('email', userInfo.email)
       .then(response => {
         const { message } = response.body;
         expect(message).toBe('Email must not contain spaces.');
@@ -296,7 +309,7 @@ describe('\nPOST /api/auth/signup', () => {
     return request(server)
       .post('/api/auth/signup')
       .auth(username, password)
-      .send(userInfo)
+      .set('email', userInfo.email)
       .then(response => {
         const { message } = response.body;
         expect(message).toBe('Password must not contain spaces.');
@@ -314,7 +327,7 @@ describe('\nPOST /api/auth/signup', () => {
     return request(server)
       .post('/api/auth/signup')
       .auth(username, password)
-      .send(userInfo)
+      .set('email', userInfo.email)
       .then(response => {
         const { message } = response.body;
         expect(message).toBe('Password must have at least 6 characters.');

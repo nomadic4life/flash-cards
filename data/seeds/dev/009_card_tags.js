@@ -10,7 +10,20 @@ exports.seed = function (knex) {
     .del()
     .then(function () {
       // Inserts seed entries
-      return knex('card_tags').insert([...jsonContent.card_tags]);
+      return knex('card_tags').insert([
+        {
+          card_id: 'a133bf86-4b4e-4e08-0123-21955baad2e8',
+          tag: 'travel'
+        },
+        {
+          card_id: '95d2ce6b-0daa-45d3-0123-1958a0e52b8c',
+          tag: 'space'
+        },
+        {
+          card_id: 'd7700a61-2a81-48ba-0123-40743e35e671',
+          tag: 'ideas'
+        },
+        ...jsonContent.card_tags]);
     });
 };
 

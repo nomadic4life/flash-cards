@@ -3,10 +3,13 @@ const deckInfo = (deck, collection, deckTags) => {
   const userInfo = {};
   const dateTimeInfo = {};
 
+  const path = 'http://localhost:4080/uploads/avatar/'
+
   return {
     userInfo() {
       userInfo.user_id = deck.user_id; // 1
       userInfo.username = deck.username; // 2
+      userInfo.avatar = path + deck.avatar; // 2
       return this
     },
     dateTimeInfo() {
@@ -151,6 +154,7 @@ const processData = data => {
   }
 
   const addCard = (card_id, deck_id, card, cards, memo) => {
+    if (card_id === null) return
     const userCard = card_id + '--' + deck_id;
     addResource(userCard, card, cards, memo);
   }
@@ -162,7 +166,7 @@ const processData = data => {
 
     if (tagCollection[id] === undefined) {
 
-      return tagCollection[id] = new Set();
+      tagCollection[id] = new Set();
     }
 
     tagCollection[id].add(tag);

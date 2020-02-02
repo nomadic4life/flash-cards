@@ -7,8 +7,8 @@ const {
   isValidEmail,
   isValidPassword,
   ifUserExist,
-  // storeAvatar,
-  createNewUser
+  createNewUser,
+  uploadAvatar
 } = require("../middleware");
 
 module.exports = router => {
@@ -23,7 +23,7 @@ module.exports = router => {
       isValidEmail,
       ifUserExist,
       isValidPassword,
-      // storeAvatar,
+      uploadAvatar,
       createNewUser,
       generateToken
     ],

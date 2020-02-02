@@ -1,3 +1,4 @@
+const { userModel } = require('../models');
 const wrapAsync = require("../utils/wrapAsyncHandler");
 
 // login ::
@@ -9,7 +10,18 @@ const wrapAsync = require("../utils/wrapAsyncHandler");
 // if passwrod doesn't match respond with incorrect credentials
 // if password match generate and sign jwt respond 200 with token
 const login = async (req, res) => {
-  res.status(200).end();
+  let user = await userModel.userData(req.user.id);
+  if (!user) {
+    user = {
+      user_id: req.user.id,
+      username: req.user.username,
+      avatar: req.user.avatar,
+      total_decks: 0,
+      total_cards: 0,
+      deck_list: []
+    }
+  }
+  res.status(200).json(user);
 };
 
 // signup ::
@@ -22,7 +34,8 @@ const login = async (req, res) => {
 // create token
 // send token to client
 const signup = async (req, res) => {
-  res.status(201).end();
+  const { user } = req
+  res.status(201).json(user);
 };
 
 module.exports = {
